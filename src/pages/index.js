@@ -9,7 +9,7 @@ import { useState } from "react";
 
 export default function Home() {
   const [url, seturl] = useState("");
-  const [shortUrl, setShorturl] = useState("");
+  const [urlId, setUrlId] = useState("");
   const [error, setError] = useState("");
 
   const handleClick = async (e) => {
@@ -17,11 +17,11 @@ export default function Home() {
       const res = await postData("/api/v1/url/create", {
         originalUrl: `${url}`,
       });
-      setShorturl(res.data.result.shortUrl);
+      setUrlId(`http://localhost:3000/${res.data.result.urlId}`);
       setError("");
     } catch (error) {
-      setError(error.response?.data?.error);
-      setShorturl("");
+      setError(error.response?.data?.error || "Something went wrong");
+      setUrlId("");
     }
     e.preventDefault();
   };
@@ -47,7 +47,7 @@ export default function Home() {
               make your life easier.
             </p>
           </div>
-          <div className="mx-auto mt-14 w-6/12 overflow-hidden rounded-lg border-2 border-redGuy px-4 py-4">
+          <div className="mx-auto mt-14 w-6/12 overflow-hidden rounded-lg border-2 border-redGuy px-4 py-2">
             <div className="flex justify-between gap-4">
               <input
                 className="w-full focus:outline-none"
@@ -58,14 +58,32 @@ export default function Home() {
                 }}
               />
               <button
-                className="px rounded-lg bg-redGuy px-4 py-2 font-light text-white"
+                className="px rounded-xl bg-redGuy px-4 py-4 font-light text-white transition-all duration-300 ease-in-out hover:bg-red-900"
                 onClick={handleClick}
               >
                 Shorten
               </button>
             </div>
           </div>
-          {shortUrl} {error}
+          <div className="mx-auto mt-20">
+            {urlId && (
+              <div className="flex justify-center gap-4">
+                <a
+                  className="text-center text-2xl font-extrabold text-redGuy"
+                  href={`${urlId}`}
+                >
+                  {urlId}
+                </a>
+              </div>
+            )}
+            {error && (
+              <div className="flex justify-center gap-4">
+                <p className="text-center text-2xl font-extrabold text-redGuy">
+                  {error}
+                </p>
+              </div>
+            )}
+          </div>
         </header>
       </main>
     </>
