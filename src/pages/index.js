@@ -73,7 +73,7 @@ export default function Home() {
                   }}
                 />
                 <button
-                  className={`px rounded-xl bg-redGuy px-4 py-4 font-light text-white transition-all duration-300 ease-in-out hover:bg-red-900 ${
+                  className={`px rounded-xl bg-redGuy px-4 py-4 font-light text-white shadow-sm shadow-red-200 backdrop-blur-md transition-all duration-300 ease-in-out hover:bg-red-700 ${
                     loading && "disabled cursor-not-allowed"
                   }`}
                   onClick={handleClick}
@@ -87,10 +87,8 @@ export default function Home() {
             {/* Result */}
             <div className="mx-auto mt-10">
               {loading && (
-                <div className="flex justify-center gap-4">
-                  <p className="text-center text-2xl font-extrabold text-redGuy">
-                    Loading...
-                  </p>
+                <div className="flex justify-center">
+                  <span className="loader mx-auto"></span>
                 </div>
               )}
               {shortUrl && (
