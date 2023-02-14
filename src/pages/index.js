@@ -1,6 +1,4 @@
 import Head from "next/head";
-import { Plus_Jakarta_Sans } from "@next/font/google";
-const pjsfont = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 import { postData } from "@/utils";
 import { useState } from "react";
@@ -26,7 +24,7 @@ export default function Home() {
       });
       setTimeout(() => {
         setShortUrl(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/${res.data.result.urlId}`
+          `${process.env.NEXT_PUBLIC_DEV_BASE_URL}/${res.data.result.urlId}`
         );
         setLoading(false);
       }, 5000);
@@ -47,11 +45,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main
-        className={`${pjsfont.className} min-h-screen bg-gradient-to-br from-slate-100 to-transparent selection:bg-red-400 selection:text-white`}
-      >
+      <main>
         <Layout>
-          <Navbar />
           <header>
             <div className="mt-20">
               <h1 className="text-center text-4xl font-extrabold text-redGuy">
