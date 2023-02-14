@@ -11,9 +11,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        redGuy: "#C51F25",
-        orangeGuy: "#F2C94C"
-      }
+        // redGuy: "#C51F25",
+        redGuy: "#1B1B1B",
+        orangeGuy: "#F2C94C",
+      },
     },
   },
   plugins: [require("prettier-plugin-tailwindcss")],
