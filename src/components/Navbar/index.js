@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import Cookies from "js-cookie";
 
 import GithubIcon from "/public/icons/github.svg";
 import Link from "next/link";
 
 export default function Navbar() {
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    setToken(Cookies.get("token"));
+  }, [token]);
+
   return (
     <nav className="flex items-center justify-between py-4">
       <Link href="/">
@@ -22,15 +29,27 @@ export default function Navbar() {
             <Image src={GithubIcon} alt="Github" />
           </button>
         </div>
-        <div className="flex items-center gap-4">
-          <Link href="/signin">
-            <button
-              className={`hover: rounded-lg py-2 px-4 shadow-lg hover:shadow-inner`}
-            >
-              <span>Sign In</span>
-            </button>
-          </Link>
-        </div>
+        {token ? (
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard">
+              <button
+                className={`hover: rounded-lg py-2 px-4 shadow-lg hover:shadow-inner`}
+              >
+                <span>Dashboard</span>
+              </button>
+            </Link>
+          </div>
+        ) : (
+          <div className="flex items-center gap-4">
+            <Link href="/signin">
+              <button
+                className={`hover: rounded-lg py-2 px-4 shadow-lg hover:shadow-inner`}
+              >
+                <span>Sign In</span>
+              </button>
+            </Link>
+          </div>
+        )}
       </div>
     </nav>
   );
