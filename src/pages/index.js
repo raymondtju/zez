@@ -1,8 +1,7 @@
 import Head from "next/head";
+import { useEffect, useState } from "react";
 
 import { postData } from "@/utils";
-import { useState } from "react";
-import Navbar from "@/components/Navbar";
 import Layout from "@/components/Layout";
 import ClipboardCopy from "@/components/ClipboardCopy";
 import Footer from "@/components/Footer";
@@ -18,22 +17,26 @@ export default function Home() {
     setLoading(true);
     setError("");
     setShortUrl("");
-    try {
-      const res = await postData("/api/v1/url/create", {
-        originalUrl: `${url}`,
-      });
+
+    const result = await postData("/api/v1/url/create", {
+      originalUrl: `${url}`,
+    });
+    console.log(result);
+
+    if (result?.data) {
       setTimeout(() => {
         setShortUrl(
-          `${process.env.NEXT_PUBLIC_DEV_BASE_URL}/${res.data.result.urlId}`
+          `${process.env.NEXT_PUBLIC_DEV_BASE_URL}/${result.data.result.urlId}`
         );
         setLoading(false);
       }, 5000);
-    } catch (error) {
+    } else {
       setTimeout(() => {
-        setError(error.response?.data?.error || "Something went wrong");
+        setError(result.response?.data?.message || "Something went wrong");
         setLoading(false);
-      }, 5000);
+      }, 3000);
     }
+
     e.preventDefault();
   };
 
@@ -62,7 +65,7 @@ export default function Home() {
                 <input
                   className="focus:border:white w-full bg-transparent focus:border-b focus:border-redGuy focus:outline-none"
                   type="text"
-                  placeholder="Paste a link to shorten it"
+                  placeholder="https://example.com"
                   onChange={(e) => {
                     seturl(e.target.value);
                   }}
@@ -78,7 +81,6 @@ export default function Home() {
                 </button>
               </div>
             </div>
-
             {/* Result */}
             <div className="mx-auto mt-10">
               {loading && (
@@ -115,4 +117,10 @@ export default function Home() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  return {
+    props: {},
+  };
 }
