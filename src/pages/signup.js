@@ -1,10 +1,45 @@
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import { Toaster, toast } from "react-hot-toast";
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
 
 import Layout from "@/components/Layout";
+import { postData } from "@/utils";
+import FormInput from "@/components/FormInput";
 
 export default function Signup() {
+  const router = useRouter();
+
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confPassword: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const result = await postData("/api/v1/user/signup", form);
+    if (result?.data) {
+      if (result?.status === 201) {
+        toast.success(result?.data?.message || "Signed up successfully");
+        setTimeout(() => {
+          router.push("/signin");
+        }, 2000);
+      }
+    } else {
+      toast.error(result?.response?.data?.message || "Something went wrong");
+    }
+  };
+
   return (
     <>
       <Head>
@@ -15,60 +50,41 @@ export default function Signup() {
       </Head>
       <main>
         <Layout>
+          <Toaster />
           <div className="mx-auto mt-20 max-w-md">
             <h1 className="text-center text-4xl font-bold">Sign Up</h1>
             <div className="mt-5 flex flex-col">
-              <form>
-                <div className="mb-6">
-                  <label htmlFor="username" className="formLabel">
-                    Your username
-                  </label>
-                  <input
-                    type="username"
-                    id="username"
-                    className="formInput"
-                    placeholder="trolllink"
-                    required
-                  />
-                </div>
-                <div className="mb-6">
-                  <label htmlFor="email" className="formLabel">
-                    Your email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="formInput"
-                    placeholder="trolllink@gmail.com"
-                    required
-                  />
-                </div>
-                <div className="mb-6">
-                  <label htmlFor="password" className="formLabel">
-                    Your password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    className="formInput"
-                    placeholder="********"
-                    required
-                  />
-                </div>
-                <div className="mb-6">
-                  <label htmlFor="password" className="formLabel">
-                    Confirmation Password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    className="formInput"
-                    placeholder="********"
-                    required
-                  />
-                </div>
+              <form onSubmit={handleSubmit}>
+                <FormInput
+                  label={"Your username"}
+                  name={"username"}
+                  type={"text"}
+                  placeholder={"trolllink"}
+                  onChange={handleChange}
+                />
+                <FormInput
+                  label={"Your email"}
+                  name={"email"}
+                  type={"email"}
+                  placeholder={"youremail@domain.com"}
+                  onChange={handleChange}
+                />
+                <FormInput
+                  label={"Set password"}
+                  name={"password"}
+                  type={"password"}
+                  placeholder={"********"}
+                  onChange={handleChange}
+                />
+                <FormInput
+                  label={"Confirm password"}
+                  name={"confPassword"}
+                  type={"password"}
+                  placeholder={"********"}
+                  onChange={handleChange}
+                />
                 <button type="submit" className="formButton">
-                  Submit
+                  Create account
                 </button>
               </form>
             </div>
@@ -83,4 +99,20 @@ export default function Signup() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { req } = context;
+  const { token } = req.cookies;
+  if (token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 }

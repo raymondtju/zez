@@ -3,9 +3,11 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import toast, { Toaster } from "react-hot-toast";
 
 import Layout from "@/components/Layout";
 import { postData } from "@/utils";
+import FormInput from "@/components/FormInput";
 
 export default function Signin() {
   const router = useRouter();
@@ -16,8 +18,6 @@ export default function Signin() {
     password: "",
   });
 
-  const [message, setMessage] = useState("");
-
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -27,17 +27,18 @@ export default function Signin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const result = await postData("/api/v1/user/signin", form);
-      console.log(result);
+    const result = await postData("/api/v1/user/signin", form);
+    if (result?.data) {
       if (result?.status === 200) {
         token = result.data.token;
         Cookies.set("token", token);
-        router.push("/");
+        toast.success(result?.data?.message || "Signed in successfully");
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
       }
-      next();
-    } catch (error) {
-      console.log(error);
+    } else {
+      toast.error(result?.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -51,43 +52,26 @@ export default function Signin() {
       </Head>
       <main>
         <Layout>
+          <Toaster />
           <div className="mx-auto mt-20 max-w-md">
             <h1 className="text-center text-4xl font-bold">Sign In</h1>
             <div className="mt-5 flex flex-col">
-              <form>
-                <div className="mb-6">
-                  <label htmlFor="text" className="formLabel">
-                    Your username
-                  </label>
-                  <input
-                    type="text"
-                    id="text"
-                    name="username"
-                    className="formInput"
-                    placeholder="trolllink"
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="mb-6">
-                  <label htmlFor="password" className="formLabel">
-                    Your password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    className="formInput"
-                    placeholder="********"
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="formButton"
-                  onClick={handleSubmit}
-                >
+              <form onSubmit={handleSubmit}>
+                <FormInput
+                  label={"Your username"}
+                  name={"username"}
+                  type={"text"}
+                  placeholder={"trolllink"}
+                  onChange={handleChange}
+                />
+                <FormInput
+                  label={"Yassword"}
+                  name={"password"}
+                  type={"password"}
+                  placeholder={"********"}
+                  onChange={handleChange}
+                />
+                <button type="submit" className="formButton">
                   Submit
                 </button>
               </form>
