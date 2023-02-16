@@ -1,17 +1,31 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
-import { postData } from "@/utils";
+import { fetchData, postData } from "@/utils";
 import Layout from "@/components/Layout";
 import ClipboardCopy from "@/components/ClipboardCopy";
 import Footer from "@/components/Footer";
 import OpenNewTab from "@/components/OpenNewTab";
+import { Toaster, toast } from "react-hot-toast";
 
-export default function Home() {
+export default function Home({ username }) {
   const [url, seturl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(false);
+
+  useEffect(() => {
+    setUser(true);
+    toast.success(`Signed in as ${username}!`);
+
+    // Give the user a chance to read the toast
+    setTimeout(() => {
+      toast.dismiss();
+    }, 5000);
+
+    // console.log("trigger");
+  }, [username]);
 
   const handleClick = async (e) => {
     setLoading(true);
@@ -21,7 +35,6 @@ export default function Home() {
     const result = await postData("/api/v1/url/create", {
       originalUrl: `${url}`,
     });
-    console.log(result);
 
     if (result?.data) {
       setTimeout(() => {
@@ -51,19 +64,26 @@ export default function Home() {
       <main>
         <Layout>
           <header>
+            {user && (
+              <Toaster
+                toastOptions={{
+                  duration: 2000,
+                }}
+              />
+            )}
             <div className="mt-20">
-              <h1 className="text-center text-4xl font-extrabold text-redGuy">
+              <h1 className="text-4xl font-extrabold text-center text-redGuy">
                 Make your URL Shorter !
               </h1>
-              <p className="mx-auto mt-1 text-center font-light">
+              <p className="mx-auto mt-1 font-light text-center">
                 TrollLink is a random link personalization tool that enable to
                 make your life more troll.
               </p>
             </div>
-            <div className="mx-auto mt-14 w-full overflow-hidden px-4 py-4 md:w-6/12 md:py-2">
+            <div className="w-full px-4 py-4 mx-auto overflow-hidden mt-14 md:w-6/12 md:py-2">
               <div className="flex flex-col justify-between gap-4 md:flex-row">
                 <input
-                  className="focus:border:white w-full bg-transparent focus:border-b focus:border-redGuy focus:outline-none"
+                  className="w-full bg-transparent focus:border:white focus:border-b focus:border-redGuy focus:outline-none"
                   type="text"
                   placeholder="https://example.com"
                   onChange={(e) => {
@@ -85,14 +105,14 @@ export default function Home() {
             <div className="mx-auto mt-10">
               {loading && (
                 <div className="flex justify-center">
-                  <span className="loader mx-auto"></span>
+                  <span className="mx-auto loader"></span>
                 </div>
               )}
               {shortUrl && (
                 <>
-                  <div className="mx-auto mt-14 w-full overflow-hidden rounded-lg border-2 border-redGuy px-4 py-4 md:w-6/12 md:py-2">
+                  <div className="w-full px-4 py-4 mx-auto overflow-hidden border-2 rounded-lg mt-14 border-redGuy md:w-6/12 md:py-2">
                     <div className="flex flex-row flex-wrap justify-between gap-2">
-                      <p className="flex cursor-grab select-all items-center">
+                      <p className="flex items-center select-all cursor-grab">
                         {shortUrl}
                       </p>
                       <div className="flex flex-row">
@@ -105,7 +125,7 @@ export default function Home() {
               )}
               {error && (
                 <div className="flex justify-center gap-4">
-                  <p className="text-center text-2xl font-extrabold text-redGuy">
+                  <p className="text-2xl font-extrabold text-center text-redGuy">
                     {error}
                   </p>
                 </div>
@@ -120,7 +140,10 @@ export default function Home() {
 }
 
 export async function getServerSideProps(context) {
+  const fetch = await fetchData("/api/v1/user", context.req.cookies.token);
+  const data = fetch.data.data.username;
+
   return {
-    props: {},
+    props: { username: data },
   };
 }
