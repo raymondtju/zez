@@ -3,9 +3,9 @@ import { fetch } from "@/utils";
 const redirect = async (req, res) => {
   const { urlId } = req.query;
   try {
-    const check = await fetch(`${process.env.NEXT_PUBLIC_DEV_BE_API}/${urlId}`);
+    const check = await fetch(`${process.env.NEXT_PUBLIC_BE_API}/${urlId}`);
     // console.log(check);
-    res.redirect(307, `${process.env.NEXT_PUBLIC_DEV_BE_API}/${urlId}`);
+    res.redirect(307, `${process.env.NEXT_PUBLIC_BE_API}/${urlId}`);
   } catch (error) {
     res.redirect(307, "/");
   }
