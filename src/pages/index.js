@@ -1,41 +1,55 @@
 import Head from "next/head";
-import { Plus_Jakarta_Sans } from "@next/font/google";
-const pjsfont = Plus_Jakarta_Sans({ subsets: ["latin"] });
+import { useEffect, useState } from "react";
 
-import { postData } from "@/utils";
-import { useState } from "react";
-import Navbar from "@/components/Navbar";
+import { fetchData, postData } from "@/utils";
 import Layout from "@/components/Layout";
 import ClipboardCopy from "@/components/ClipboardCopy";
 import Footer from "@/components/Footer";
 import OpenNewTab from "@/components/OpenNewTab";
+import { Toaster, toast } from "react-hot-toast";
 
-export default function Home() {
+export default function Home({ username }) {
   const [url, seturl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(false);
+
+  useEffect(() => {
+    setUser(true);
+    toast.success(`Signed in as ${username}!`);
+
+    // Give the user a chance to read the toast
+    setTimeout(() => {
+      toast.dismiss();
+    }, 5000);
+
+    // console.log("trigger");
+  }, [username]);
 
   const handleClick = async (e) => {
     setLoading(true);
     setError("");
     setShortUrl("");
-    try {
-      const res = await postData("/api/v1/url/create", {
-        originalUrl: `${url}`,
-      });
+
+    const result = await postData("/api/v1/url/create", {
+      originalUrl: `${url}`,
+    });
+
+    if (result?.data) {
       setTimeout(() => {
         setShortUrl(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/${res.data.result.urlId}`
+          `${process.env.NEXT_PUBLIC_DEV_BASE_URL}/${result.data.result.urlId}`
         );
         setLoading(false);
       }, 5000);
-    } catch (error) {
+    } else {
       setTimeout(() => {
-        setError(error.response?.data?.error || "Something went wrong");
+        setError(result.response?.data?.message || "Something went wrong");
         setLoading(false);
-      }, 5000);
+      }, 3000);
     }
+
     e.preventDefault();
   };
 
@@ -47,27 +61,31 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main
-        className={`${pjsfont.className} min-h-screen bg-gradient-to-br from-slate-100 to-transparent selection:bg-red-400 selection:text-white`}
-      >
+      <main>
         <Layout>
-          <Navbar />
           <header>
+            {user && (
+              <Toaster
+                toastOptions={{
+                  duration: 2000,
+                }}
+              />
+            )}
             <div className="mt-20">
-              <h1 className="text-center text-4xl font-extrabold text-redGuy">
+              <h1 className="text-4xl font-extrabold text-center text-redGuy">
                 Make your URL Shorter !
               </h1>
-              <p className="mx-auto mt-1 text-center font-light">
+              <p className="mx-auto mt-1 font-light text-center">
                 TrollLink is a random link personalization tool that enable to
                 make your life more troll.
               </p>
             </div>
-            <div className="mx-auto mt-14 w-full overflow-hidden px-4 py-4 md:w-6/12 md:py-2">
+            <div className="w-full px-4 py-4 mx-auto overflow-hidden mt-14 md:w-6/12 md:py-2">
               <div className="flex flex-col justify-between gap-4 md:flex-row">
                 <input
-                  className="focus:border:white w-full bg-transparent focus:border-b focus:border-redGuy focus:outline-none"
+                  className="w-full bg-transparent focus:border:white focus:border-b focus:border-redGuy focus:outline-none"
                   type="text"
-                  placeholder="Paste a link to shorten it"
+                  placeholder="https://example.com"
                   onChange={(e) => {
                     seturl(e.target.value);
                   }}
@@ -83,19 +101,18 @@ export default function Home() {
                 </button>
               </div>
             </div>
-
             {/* Result */}
             <div className="mx-auto mt-10">
               {loading && (
                 <div className="flex justify-center">
-                  <span className="loader mx-auto"></span>
+                  <span className="mx-auto loader"></span>
                 </div>
               )}
               {shortUrl && (
                 <>
-                  <div className="mx-auto mt-14 w-full overflow-hidden rounded-lg border-2 border-redGuy px-4 py-4 md:w-6/12 md:py-2">
+                  <div className="w-full px-4 py-4 mx-auto overflow-hidden border-2 rounded-lg mt-14 border-redGuy md:w-6/12 md:py-2">
                     <div className="flex flex-row flex-wrap justify-between gap-2">
-                      <p className="flex cursor-grab select-all items-center">
+                      <p className="flex items-center select-all cursor-grab">
                         {shortUrl}
                       </p>
                       <div className="flex flex-row">
@@ -108,7 +125,7 @@ export default function Home() {
               )}
               {error && (
                 <div className="flex justify-center gap-4">
-                  <p className="text-center text-2xl font-extrabold text-redGuy">
+                  <p className="text-2xl font-extrabold text-center text-redGuy">
                     {error}
                   </p>
                 </div>
@@ -120,4 +137,13 @@ export default function Home() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const fetch = await fetchData("/api/v1/user", context.req.cookies.token);
+  const data = fetch.data.data.username;
+
+  return {
+    props: { username: data },
+  };
 }
