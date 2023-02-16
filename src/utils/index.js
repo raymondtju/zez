@@ -19,6 +19,18 @@ export async function postData(url, payload) {
   }
 }
 
-export async function fetch(url, payload) {
-  return await axios.get(`${url}`, payload);
+export async function fetchData(url, token) {
+  if (!token) {
+    token = process.env.NEXT_PUBLIC_GUEST_TOKEN;
+  }
+
+  try {
+    return await axios.get(`${url}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    return error;
+  }
 }
