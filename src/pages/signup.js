@@ -17,6 +17,7 @@ export default function Signup() {
     password: "",
     confPassword: "",
   });
+  const [alert, setAlert] = useState(false);
 
   const handleChange = (e) => {
     setForm({
@@ -26,6 +27,7 @@ export default function Signup() {
   };
 
   const handleSubmit = async (e) => {
+    setAlert(true);
     e.preventDefault();
     const result = await postData("/api/v1/user/signup", form);
     if (result?.data) {
@@ -50,7 +52,7 @@ export default function Signup() {
       </Head>
       <main>
         <Layout>
-          <Toaster />
+          {alert && <Toaster />}
           <div className="mx-auto mt-20 max-w-md">
             <h1 className="text-center text-4xl font-bold">Sign Up</h1>
             <div className="mt-5 flex flex-col">

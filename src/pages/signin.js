@@ -17,6 +17,7 @@ export default function Signin() {
     username: "",
     password: "",
   });
+  const [alert, setAlert] = useState(false);
 
   const handleChange = (e) => {
     setForm({
@@ -27,6 +28,7 @@ export default function Signin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setAlert(true);
     const result = await postData("/api/v1/user/signin", form);
     if (result?.data) {
       if (result?.status === 200) {
@@ -52,10 +54,10 @@ export default function Signin() {
       </Head>
       <main>
         <Layout>
-          <Toaster />
-          <div className="mx-auto mt-20 max-w-md">
-            <h1 className="text-center text-4xl font-bold">Sign In</h1>
-            <div className="mt-5 flex flex-col">
+          {alert && <Toaster />}
+          <div className="max-w-md mx-auto mt-20">
+            <h1 className="text-4xl font-bold text-center">Sign In</h1>
+            <div className="flex flex-col mt-5">
               <form onSubmit={handleSubmit}>
                 <FormInput
                   label={"Your username"}
