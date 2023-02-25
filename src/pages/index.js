@@ -39,7 +39,7 @@ export default function Home({ username }) {
     if (result?.data) {
       setTimeout(() => {
         setShortUrl(
-          `${process.env.NEXT_PUBLIC_DEV_BASE_URL}/${result.data.result.urlId}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/${result.data.result.urlId}`
         );
         setLoading(false);
       }, 5000);
