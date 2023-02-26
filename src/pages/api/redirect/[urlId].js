@@ -3,11 +3,13 @@ import { fetchData } from "@/utils";
 const redirect = async (req, res) => {
   const { urlId } = req.query;
   try {
-    const check = await fetchData(`${process.env.NEXT_PUBLIC_BE_API}/${urlId}`);
+    const check = await fetchData(
+      `${process.env.NEXT_PUBLIC_DEV_BE_API}/${urlId}`
+    );
     if (check.data.message === "Url not found") {
       res.redirect(307, "/");
     }
-    res.redirect(307, `${process.env.NEXT_PUBLIC_BE_API}/${urlId}`);
+    res.redirect(307, `${process.env.NEXT_PUBLIC_DEV_BE_API}/${urlId}`);
   } catch (error) {
     console.log(error);
     res.redirect(307, "/");
