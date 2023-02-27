@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 
-import GithubIcon from "/public/icons/github.svg";
+import GithubIcon from "/public/assets/icons/github.svg";
 import Link from "next/link";
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/solid";
 
@@ -30,15 +30,11 @@ export default function Navbar() {
         </div>
       </Link>
       <div className="flex flex-row gap-x-2">
-        <div className="flex items-center gap-4">
-          <button
-            href="https://github.com/raymondtju"
-            target="_blank"
-            className={`hover: p-2 hover:rounded-lg hover:shadow-xl`}
-          >
+        <Link href={"https://github.com/raymondtju"} target="_blank">
+          <div className="hover: flex items-center gap-4 p-2 hover:rounded-lg hover:shadow-xl">
             <Image src={GithubIcon} alt="Github" />
-          </button>
-        </div>
+          </div>
+        </Link>
         {router.pathname !== "/signin" && (
           <>
             {isToken ? (
@@ -56,7 +52,7 @@ export default function Navbar() {
                   onClick={handleLogout}
                 >
                   <span>
-                    <ArrowLeftOnRectangleIcon className="w-5 h-5 fill-red-600" />
+                    <ArrowLeftOnRectangleIcon className="h-5 w-5 fill-red-600" />
                   </span>
                 </button>
               </div>
