@@ -1,11 +1,32 @@
 import Head from "next/head";
 import React, { useState } from "react";
 import { ClockIcon, LinkIcon } from "@heroicons/react/24/solid";
+import { AnimatePresence, motion } from "framer-motion";
 
 import Layout from "@/components/Layout";
 import { fetchData } from "@/utils";
 import { formatDate } from "@/utils/formatDate";
 import Link from "next/link";
+
+const container = {
+  hidden: { opacity: 1, scale: 0 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const containerItem = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+  },
+};
 
 export default function Dashboard({ data }) {
   return (
@@ -21,18 +42,39 @@ export default function Dashboard({ data }) {
           <h1 className="mt-8 text-xl font-bold tracking-tighter">
             YOUR TROLLING LINKS
           </h1>
-          <div className="grid gap-4 mt-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+
+          <motion.div
+            className="mt-4 grid gap-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
+            // hidden={{ opacity: 1, scale: 0 }}
+            // visible={{
+            //   opacity: 1,
+            //   scale: 1,
+            //   transition: {
+            //     delayChildren: 0.3,
+            //     staggerChildren: 0.2,
+            //   },
+            // }}
+            initial="hidden"
+            animate="visible"
+            variants={container}
+          >
             {data.reverse().map((item) => (
-              <div
+              <motion.div
                 key={item._id}
                 className="flex flex-col overflow-hidden rounded-lg border-[1px] border-gray-200 bg-white p-4 px-6"
+                // hidden={{ y: 20, opacity: 0 }}
+                // visible={{
+                //   y: 0,
+                //   opacity: 1,
+                // }}
+                variants={containerItem}
               >
                 <Link
                   href={item.shortUrl}
                   className="text-lg font-bold hover:underline hover:underline-offset-4"
                 >
                   <span className="flex flex-row items-center gap-1">
-                    <LinkIcon className="w-5 h-5" />
+                    <LinkIcon className="h-5 w-5" />
                     trolllink.vercel.app/{item.urlId}
                   </span>
                 </Link>
@@ -45,17 +87,17 @@ export default function Dashboard({ data }) {
                 </p>
                 <div className="my-3 border-b-[0.5px] border-gray-400"></div>
                 <div className="flex items-center gap-1 text-xs font-bold text-gray-400">
-                  <ClockIcon className="w-4 h-4" />
+                  <ClockIcon className="h-4 w-4" />
                   <span>{formatDate(item.createdAt)}</span>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
           <div>
             {data.length === 0 && (
               <>
                 <div className="flex flex-row items-center justify-center gap-1 ">
-                  <LinkIcon className="w-5 h-5" />
+                  <LinkIcon className="h-5 w-5" />
                   <span className="uppercase">No links found.</span>
                   <Link href="/">
                     <span className="font-bold text-blue-700 hover:underline hover:underline-offset-2">
