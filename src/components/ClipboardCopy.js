@@ -1,5 +1,5 @@
+import clsx from "clsx";
 import { useState } from "react";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 
 export default function ClipboardCopy({ text }) {
   const [isCopied, setIsCopied] = useState(false);
@@ -24,19 +24,17 @@ export default function ClipboardCopy({ text }) {
   };
 
   return (
-    <div>
+    <>
       <button
         onClick={handleClick}
-        className={`
-          items-center p-2
-        `}
+        className={clsx(
+          "items-center rounded-lg  px-2 py-0.5 text-sm ",
+          "dark:bg-zinc-900 dark:text-zinc-100",
+          `${isCopied ? "bg-primary text-white" : "bg-white text-primary"}`
+        )}
       >
-        <DocumentDuplicateIcon
-          className={`
-          ${isCopied ? "fill-red-200" : "fill-redGuy"} h-5 w-5 md:h-6 md:w-6
-          `}
-        />
+        Copy
       </button>
-    </div>
+    </>
   );
 }
