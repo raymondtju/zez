@@ -1,58 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "./satoshi.css";
+@import "./chillax.css";
 
-@layer components {
-  .loader {
-    width: 8px;
-    height: 8px;
-    border-radius: 90%;
-    display: flex;
-    margin: 15px auto;
-    position: relative;
-    color: #c51f25;
-    left: -120px;
-    box-sizing: border-box;
-    animation: shadowRolling 2s linear infinite;
-  }
-
-  @keyframes shadowRolling {
-    0% {
-      box-shadow: 0px 0 rgba(255, 83, 83, 0), 0px 0 rgba(255, 83, 83, 0),
-        0px 0 rgba(255, 83, 83, 0), 0px 0 rgba(255, 83, 83, 0);
-    }
-    12% {
-      box-shadow: 100px 0 #c51f25, 0px 0 rgba(255, 83, 83, 0),
-        0px 0 rgba(255, 83, 83, 0), 0px 0 rgba(255, 83, 83, 0);
-    }
-    25% {
-      box-shadow: 110px 0 #c51f25, 100px 0 #c51f25, 0px 0 rgba(255, 83, 83, 0),
-        0px 0 rgba(255, 83, 83, 0);
-    }
-    36% {
-      box-shadow: 120px 0 #c51f25, 110px 0 #c51f25, 100px 0 #c51f25,
-        0px 0 rgba(255, 83, 83, 0);
-    }
-    50% {
-      box-shadow: 130px 0 #c51f25, 120px 0 #c51f25, 110px 0 #c51f25,
-        100px 0 #c51f25;
-    }
-    62% {
-      box-shadow: 200px 0 rgba(255, 83, 83, 0), 130px 0 #c51f25, 120px 0 #c51f25,
-        110px 0 #c51f25;
-    }
-    75% {
-      box-shadow: 200px 0 rgba(255, 83, 83, 0), 200px 0 rgba(255, 83, 83, 0),
-        130px 0 #c51f25, 120px 0 #c51f25;
-    }
-    87% {
-      box-shadow: 200px 0 rgba(255, 83, 83, 0), 200px 0 rgba(255, 83, 83, 0),
-        200px 0 rgba(255, 83, 83, 0), 130px 0 #c51f25;
-    }
-    100% {
-      box-shadow: 200px 0 rgba(255, 83, 83, 0), 200px 0 rgba(255, 83, 83, 0),
-        200px 0 rgba(255, 83, 83, 0), 200px 0 rgba(255, 83, 83, 0);
-    }
+@layer base {
+  * {
+    scroll-behavior: smooth;
   }
 }
 
