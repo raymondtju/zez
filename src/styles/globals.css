@@ -16,7 +16,7 @@
   }
 
   .formLabel {
-    @apply mb-2 block text-sm font-medium text-gray-900 dark:text-white;
+    @apply block mb-2 text-sm font-medium text-gray-900 dark:text-white;
   }
 
   .formButton {

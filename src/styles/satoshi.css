@@ -54,7 +54,7 @@
 
 */
 
-@font-face {
+/* @font-face {
   font-family: "Satoshi-VariableItalic";
   src: url("../assets/fonts/satoshi/Satoshi-VariableItalic.woff2")
       format("woff2"),
@@ -163,4 +163,4 @@
   font-weight: 900;
   font-display: swap;
   font-style: italic;
-}
+} */
