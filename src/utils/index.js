@@ -34,3 +34,24 @@ export async function fetchData(url, token) {
     return error;
   }
 }
+
+export async function removeData(url) {
+  const token = Cookies.get("token");
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+  try {
+    return await axios.delete(`${url}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+}
