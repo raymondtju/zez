@@ -10,10 +10,10 @@ import {
 } from "@heroicons/react/24/solid";
 
 import { postData } from "@/utils";
-import ClipboardCopy from "@/components/ClipboardCopy";
+import ClipboardCopy from "@/helpers/ClipboardCopy";
 import HeaderTitle from "./HeaderTitle";
 
-import { qrOptions, useQrCode } from "@/components/QRCode";
+import { qrOptions, useQrCode } from "@/helpers/QRCode";
 
 // Whether you're promoting a blog post, a product, or anything in between, Kraa's got your back.
 export default function Header() {

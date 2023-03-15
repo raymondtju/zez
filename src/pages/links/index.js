@@ -10,7 +10,7 @@ import clsx from "clsx";
 import Layout from "@/components/Layout";
 import { fetchData, removeData } from "@/utils";
 import { formatDate } from "@/utils/formatDate";
-import { qrOptions, useQrCode } from "@/components/QRCode";
+import { qrOptions, useQrCode } from "@/helpers/QRCode";
 import CardLink from "@/components/Card/CardLink";
 import { Toaster, toast } from "react-hot-toast";
 
