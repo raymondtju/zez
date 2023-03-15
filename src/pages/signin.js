@@ -8,8 +8,12 @@ import toast, { Toaster } from "react-hot-toast";
 import Layout from "@/components/Layout";
 import { postData } from "@/utils";
 import FormInput from "@/components/FormInput";
+import { useDispatch, useSelector } from "react-redux";
+import { setUsername } from "@/state/user/slice";
 
 export default function Signin() {
+  const dispatch = useDispatch();
+
   const router = useRouter();
   let token;
 
@@ -34,6 +38,8 @@ export default function Signin() {
       if (result?.status === 200) {
         token = result.data.token;
         Cookies.set("token", token);
+        dispatch(setUsername(form.username));
+        localStorage.setItem("username", form.username);
         toast.success(result?.data?.message || "Signed in successfully");
         setTimeout(() => {
           router.push("/");
@@ -55,9 +61,9 @@ export default function Signin() {
       <main>
         <Layout>
           {alert && <Toaster />}
-          <div className="max-w-md mx-auto mt-20">
-            <h1 className="text-4xl font-bold text-center">Sign In</h1>
-            <div className="flex flex-col mt-5">
+          <div className="mx-auto mt-20 max-w-md">
+            <h1 className="text-center text-4xl font-bold">Sign In</h1>
+            <div className="mt-5 flex flex-col">
               <form onSubmit={handleSubmit}>
                 <FormInput
                   label={"Your username"}
