@@ -1,19 +1,19 @@
-import { Plus_Jakarta_Sans } from "@next/font/google";
 import "@/styles/globals.css";
 import Navbar from "@/components/Navbar";
-import Layout from "@/components/Layout";
-
-const pjsfont = Plus_Jakarta_Sans({ subsets: ["latin"] });
+import { store } from "@/state/store";
+// import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from "react-redux";
+import { LazyMotion, domAnimation } from "framer-motion";
 
 export default function App({ Component, pageProps }) {
   return (
-    <div
-      className={`${pjsfont.className} min-h-screen bg-gradient-to-br from-slate-100 to-transparent selection:bg-gray-500 selection:text-white`}
-    >
-      <Layout>
-        <Navbar />
-      </Layout>
-      <Component {...pageProps} />
-    </div>
+    <>
+      <Provider store={store}>
+        <LazyMotion features={domAnimation}>
+          <Navbar />
+          <Component {...pageProps} />
+        </LazyMotion>
+      </Provider>
+    </>
   );
 }
