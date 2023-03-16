@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const config = {
   matcher: [
@@ -15,7 +15,9 @@ export const config = {
   ],
 };
 
-export default async function middleware(req) {
+export default async function middleware(
+  req: NextRequest
+): Promise<NextResponse> {
   const path = req.nextUrl.pathname.split("/")[1];
   if (["favicon.ico", "api", ""].includes(path)) {
     return NextResponse.next();

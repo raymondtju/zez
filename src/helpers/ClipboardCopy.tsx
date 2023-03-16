@@ -1,17 +1,25 @@
 import clsx from "clsx";
 import { useState } from "react";
 
-export default function ClipboardCopy({ text }) {
+interface ClipboardCopyProps {
+  text: string;
+}
+
+export default function ClipboardCopy({ text }: ClipboardCopyProps) {
   const [isCopied, setIsCopied] = useState(false);
 
-  async function copyTextToClipboard(text) {
+  async function copyTextToClipboard({
+    text,
+  }: {
+    text: string;
+  }): Promise<void> {
     if ("clipboard" in navigator) {
       return await navigator.clipboard.writeText(text);
     }
   }
 
   const handleClick = () => {
-    copyTextToClipboard(text)
+    copyTextToClipboard({ text })
       .then(() => {
         setIsCopied(true);
         setTimeout(() => {

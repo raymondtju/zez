@@ -13,24 +13,23 @@ import { postData } from "@/utils";
 import ClipboardCopy from "@/helpers/ClipboardCopy";
 import HeaderTitle from "./HeaderTitle";
 
-import { qrOptions, useQrCode } from "@/helpers/QRCode";
+import { useQrCode } from "@/helpers/useQrCode";
 
-// Whether you're promoting a blog post, a product, or anything in between, Kraa's got your back.
 export default function Header() {
-  const [url, seturl] = useState("");
-  const [shortUrl, setShortUrl] = useState("");
-  const [error, setError] = useState("");
+  const [url, seturl] = useState<string>("");
+  const [shortUrl, setShortUrl] = useState<string>(null);
+  const [error, setError] = useState<string>(null);
   const [loading, setLoading] = useState(false);
-  const [temurl, setTemurl] = useState("");
-  let qr = useQrCode(qrOptions);
+  const [temurl, setTemurl] = useState<string>(null);
+  let qr = useQrCode();
 
   useEffect(() => {
     qr.update({ data: shortUrl });
   }, [shortUrl, qr]);
 
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
-  const handleClick = async (e) => {
+  async function handleClick(e: any): Promise<void> {
     setLoading(true);
     setError("");
     setShortUrl("");
@@ -59,11 +58,12 @@ export default function Header() {
     }
 
     e.preventDefault();
-  };
+  }
 
-  const handleGenerate = () => {
+  function handleGenerate() {
     qr.append(ref.current);
-  };
+  }
+
   return (
     <header className="mt-16">
       <HeaderTitle />
@@ -147,7 +147,7 @@ export default function Header() {
               {shortUrl}
             </a>
             <div className="flex items-center space-x-2">
-              <ClipboardCopy text={shortUrl} targetUrl={shortUrl} />
+              <ClipboardCopy text={shortUrl} />
               <ShareIcon className="h-5 w-5 " />
               <button onClick={handleGenerate}>
                 <QrCodeIcon className="h-6 w-6" />

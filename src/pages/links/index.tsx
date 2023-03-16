@@ -10,7 +10,7 @@ import clsx from "clsx";
 import Layout from "@/components/Layout";
 import { fetchData, removeData } from "@/utils";
 import { formatDate } from "@/utils/formatDate";
-import { qrOptions, useQrCode } from "@/helpers/QRCode";
+import { useQrCode } from "@/helpers/useQrCode";
 import CardLink from "@/components/Card/CardLink";
 import { Toaster, toast } from "react-hot-toast";
 
@@ -28,7 +28,7 @@ const container = {
 
 function Links({ data }) {
   const router = useRouter();
-  const qr = useQrCode(qrOptions);
+  const qr: any = useQrCode();
 
   const [target, setTarget] = useState("");
   const [open, setOpen] = useState(false);
@@ -42,21 +42,20 @@ function Links({ data }) {
     qr.append(ref.current);
   }, [target, qr]);
 
-  const refreshData = () => {
+  function refreshData() {
     router.replace(router.asPath);
-  };
+  }
 
-  const handleDelete = async (id) => {
+  async function handleDelete(id: string): Promise<void> {
     const res = await toast.promise(removeData(`/api/v1/url/remove/${id}`), {
       loading: "Deleting...",
       success: "Deleted",
       error: "Failed to delete",
     });
-    console.log(res);
     if (res.status === 200) {
       refreshData();
     }
-  };
+  }
 
   const handleDownload = () => {
     qr.download({
@@ -73,7 +72,7 @@ function Links({ data }) {
   const [dataa, setDataa] = useState(data);
   useEffect(() => {
     if (keyword) {
-      const fil = data.filter((item) => {
+      const fil = data.filter((item: { urlId: string }) => {
         return item.urlId.toLowerCase().includes(keyword);
       });
       setDataa(fil);
@@ -185,10 +184,8 @@ function Links({ data }) {
                   <CardLink
                     key={item._id}
                     urlId={item.urlId}
-                    id={item._id}
                     createdAt={formatDate(item.createdAt)}
                     reach={item.reach}
-                    shortUrl={item.shortUrl}
                     originalUrl={item.originalUrl}
                     handleDelete={() => handleDelete(item._id)}
                     handleGenerate={() => {
@@ -197,9 +194,9 @@ function Links({ data }) {
                       setOpen(!open);
                     }}
                     handleEdit={() => {
-                      setEditId(item._id);
-                      setEditUrl(item.originalUrl);
-                      setEditModal(true);
+                      // setEditId(item._id);
+                      // setEditUrl(item.originalUrl);
+                      // setEditModal(true);
                     }}
                   />
                 </Fragment>

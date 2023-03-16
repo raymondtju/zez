@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import toast, { Toaster } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 
 import Layout from "@/components/Layout";
-import { postData } from "@/utils";
 import FormInput from "@/components/FormInput";
-import { useDispatch, useSelector } from "react-redux";
+import { postData } from "@/utils";
 import { setUsername } from "@/state/user/slice";
 
 export default function Signin() {
   const dispatch = useDispatch();
 
   const router = useRouter();
-  let token;
+  let token: string;
 
   const [form, setForm] = useState({
     username: "",
@@ -23,14 +24,16 @@ export default function Signin() {
   });
   const [alert, setAlert] = useState(false);
 
-  const handleChange = (e) => {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
-  };
+  }
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> {
     e.preventDefault();
     setAlert(true);
     const result = await postData("/api/v1/user/signin", form);
@@ -48,7 +51,7 @@ export default function Signin() {
     } else {
       toast.error(result?.response?.data?.message || "Something went wrong");
     }
-  };
+  }
 
   return (
     <>
@@ -71,6 +74,7 @@ export default function Signin() {
                   type={"text"}
                   placeholder={"trolllink"}
                   onChange={handleChange}
+                  value={form.username}
                 />
                 <FormInput
                   label={"Yassword"}
@@ -78,6 +82,7 @@ export default function Signin() {
                   type={"password"}
                   placeholder={"********"}
                   onChange={handleChange}
+                  value={form.password}
                 />
                 <button type="submit" className="formButton">
                   Submit
@@ -97,7 +102,7 @@ export default function Signin() {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req } = context;
   const { token } = req.cookies;
   if (token) {
@@ -111,4 +116,4 @@ export async function getServerSideProps(context) {
   return {
     props: {},
   };
-}
+};

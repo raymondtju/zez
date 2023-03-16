@@ -18,6 +18,16 @@ const containerItem = {
   },
 };
 
+interface CardLinkProps {
+  urlId: string;
+  originalUrl: string;
+  reach: number;
+  createdAt: string;
+  handleDelete: () => void;
+  handleGenerate: () => void;
+  handleEdit: () => void;
+}
+
 function CardLink({
   urlId,
   originalUrl,
@@ -26,7 +36,7 @@ function CardLink({
   handleDelete,
   handleGenerate,
   handleEdit,
-}) {
+}: CardLinkProps) {
   return (
     <m.div
       className={clsx(

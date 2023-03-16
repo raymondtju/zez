@@ -1,7 +1,7 @@
 import clsx from "clsx";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
-export default function Layout({ children }) {
+export default function Layout({ children }: PropsWithChildren) {
   return (
     <div
       className={clsx(

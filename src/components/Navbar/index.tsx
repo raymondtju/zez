@@ -4,8 +4,6 @@ import Link from "next/link";
 import Cookies from "js-cookie";
 import clsx from "clsx";
 
-import { useDispatch, useSelector } from "react-redux";
-
 import Layout from "../Layout";
 import { toogleTheme } from "@/state/theme/slice";
 import { setUsername } from "@/state/user/slice";
@@ -19,10 +17,12 @@ import {
   SunIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 
 export default function Navbar() {
-  const theme = useSelector((state) => state.theme.value);
-  const dispatch = useDispatch();
+  let theme = useAppSelector((state) => state.theme.value);
+
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
   const [isToken, setIsToken] = useState(false);
@@ -160,7 +160,7 @@ export default function Navbar() {
                       "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:border-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
                     )}
                   >
-                    {theme === "dark" ? (
+                    {theme ? (
                       <SunIcon className="h-6 w-6" />
                     ) : (
                       <MoonIcon className="h-6 w-6" />

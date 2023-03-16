@@ -7,6 +7,7 @@ import Link from "next/link";
 import Layout from "@/components/Layout";
 import { postData } from "@/utils";
 import FormInput from "@/components/FormInput";
+import { GetServerSideProps } from "next";
 
 export default function Signup() {
   const router = useRouter();
@@ -19,14 +20,16 @@ export default function Signup() {
   });
   const [alert, setAlert] = useState(false);
 
-  const handleChange = (e) => {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
-  };
+  }
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> {
     setAlert(true);
     e.preventDefault();
     const result = await postData("/api/v1/user/signup", form);
@@ -40,7 +43,7 @@ export default function Signup() {
     } else {
       toast.error(result?.response?.data?.message || "Something went wrong");
     }
-  };
+  }
 
   return (
     <>
@@ -63,6 +66,7 @@ export default function Signup() {
                   type={"text"}
                   placeholder={"trolllink"}
                   onChange={handleChange}
+                  value={form.username}
                 />
                 <FormInput
                   label={"Your email"}
@@ -70,6 +74,7 @@ export default function Signup() {
                   type={"email"}
                   placeholder={"youremail@domain.com"}
                   onChange={handleChange}
+                  value={form.email}
                 />
                 <FormInput
                   label={"Set password"}
@@ -77,6 +82,7 @@ export default function Signup() {
                   type={"password"}
                   placeholder={"********"}
                   onChange={handleChange}
+                  value={form.password}
                 />
                 <FormInput
                   label={"Confirm password"}
@@ -84,6 +90,7 @@ export default function Signup() {
                   type={"password"}
                   placeholder={"********"}
                   onChange={handleChange}
+                  value={form.confPassword}
                 />
                 <button type="submit" className="formButton">
                   Create account
@@ -103,7 +110,7 @@ export default function Signup() {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req } = context;
   const { token } = req.cookies;
   if (token) {
@@ -117,4 +124,4 @@ export async function getServerSideProps(context) {
   return {
     props: {},
   };
-}
+};
