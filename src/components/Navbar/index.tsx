@@ -156,7 +156,7 @@ export default function Navbar() {
                     onClick={() => dispatch(toogleTheme())}
                     className={clsx(
                       "mt-14 w-fit rounded-xl border-2 border-zinc-900 p-4",
-                      "duration-300 hover:bg-zinc-900 hover:text-zinc-100 ",
+                      "transition-all duration-300 ease-in-out hover:bg-zinc-900 hover:text-zinc-100",
                       "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:border-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
                     )}
                   >

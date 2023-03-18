@@ -4,6 +4,7 @@ import clsx from "clsx";
 
 import {
   ArrowRightCircleIcon,
+  ArrowRightIcon,
   LinkIcon,
   QrCodeIcon,
   ShareIcon,
@@ -75,7 +76,7 @@ export default function Header() {
         )}
       >
         <div className="flex flex-row items-center justify-between gap-4">
-          <LinkIcon className="h-5 w-5" />
+          <LinkIcon className="h-6 w-6" />
           <input
             className={clsx(
               `w-full bg-zinc-100`,
@@ -100,7 +101,7 @@ export default function Header() {
             disabled={loading}
           >
             <span className="sr-only">Short Link</span>
-            <ArrowRightCircleIcon className="h-5 w-5" />
+            <ArrowRightIcon className="h-5 w-5" />
           </m.button>
         </div>
       </div>
