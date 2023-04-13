@@ -1,7 +1,19 @@
 {
-  "name": "fe-urlshortener",
-  "version": "0.1.0",
-  "private": true,
+  "name": "kraa",
+  "version": "1.0.0",
+  "description": "URL Personalization",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raymondtju/kraa.git"
+  },
+  "keywords": [],
+  "author": "Raymond Tju",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raymondtju/kraa/issues"
+  },
+  "homepage": "https://github.com/raymondtju/kraa#readme",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
