@@ -11,46 +11,26 @@ import Layout from "@/components/Layout";
 import FormInput from "@/components/FormInput";
 import { postData } from "@/utils";
 import { setUsername } from "@/state/user/slice";
+import Button from "@/components/Button";
 
 export default function Signin() {
   const dispatch = useDispatch();
-
   const router = useRouter();
-  let token: string;
 
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
   const [alert, setAlert] = useState(false);
 
+  let token: string;
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
-  }
-
-  async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> {
-    e.preventDefault();
-    setAlert(true);
-    const result = await postData("/api/v1/user/signin", form);
-    if (result?.data) {
-      if (result?.status === 200) {
-        token = result.data.token;
-        Cookies.set("token", token);
-        dispatch(setUsername(form.username));
-        localStorage.setItem("username", form.username);
-        toast.success(result?.data?.message || "Signed in successfully");
-        setTimeout(() => {
-          router.push("/");
-        }, 2000);
-      }
-    } else {
-      toast.error(result?.response?.data?.message || "Something went wrong");
-    }
   }
 
   return (
@@ -67,7 +47,34 @@ export default function Signin() {
           <div className="mx-auto mt-20 max-w-md">
             <h1 className="text-center text-4xl font-bold">Sign In</h1>
             <div className="mt-5 flex flex-col">
-              <form onSubmit={handleSubmit}>
+              <form
+                onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
+                  e.preventDefault();
+                  setLoading(true);
+                  setAlert(true);
+                  const result = await postData("/api/v1/user/signin", form);
+                  if (result?.data) {
+                    if (result?.status === 200) {
+                      setLoading(false);
+                      token = result.data.token;
+                      Cookies.set("token", token);
+                      dispatch(setUsername(form.username));
+                      localStorage.setItem("username", form.username);
+                      toast.success(
+                        result?.data?.message || "Signed in successfully"
+                      );
+                      setTimeout(() => {
+                        router.push("/");
+                      }, 2000);
+                    }
+                  } else {
+                    toast.error(
+                      result?.response?.data?.message || "Something went wrong"
+                    );
+                    setLoading(false);
+                  }
+                }}
+              >
                 <FormInput
                   label={"Your username"}
                   name={"username"}
@@ -84,14 +91,14 @@ export default function Signin() {
                   onChange={handleChange}
                   value={form.password}
                 />
-                <button type="submit" className="formButton">
+                <Button type="submit" disabled={loading}>
                   Submit
-                </button>
+                </Button>
               </form>
             </div>
             <p className="mt-10 text-center">
               Need an account?
-              <Link href="/signup" className="text-blue-700">
+              <Link href="/auth/signup" className="text-blue-700">
                 {" Create an account"}
               </Link>
             </p>

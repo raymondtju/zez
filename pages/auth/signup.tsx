@@ -8,10 +8,12 @@ import Layout from "@/components/Layout";
 import { postData } from "@/utils";
 import FormInput from "@/components/FormInput";
 import { GetServerSideProps } from "next";
+import Button from "@/components/Button";
 
 export default function Signup() {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -25,24 +27,6 @@ export default function Signup() {
       ...form,
       [e.target.name]: e.target.value,
     });
-  }
-
-  async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> {
-    setAlert(true);
-    e.preventDefault();
-    const result = await postData("/api/v1/user/signup", form);
-    if (result?.data) {
-      if (result?.status === 201) {
-        toast.success(result?.data?.message || "Signed up successfully");
-        setTimeout(() => {
-          router.push("/signin");
-        }, 2000);
-      }
-    } else {
-      toast.error(result?.response?.data?.message || "Something went wrong");
-    }
   }
 
   return (
@@ -59,7 +43,30 @@ export default function Signup() {
           <div className="mx-auto mt-20 max-w-md">
             <h1 className="text-center text-4xl font-bold">Sign Up</h1>
             <div className="mt-5 flex flex-col">
-              <form onSubmit={handleSubmit}>
+              <form
+                onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
+                  e.preventDefault();
+                  setLoading(true);
+                  setAlert(true);
+                  const result = await postData("/api/v1/user/signup", form);
+                  if (result?.data) {
+                    if (result?.status === 201) {
+                      setLoading(false);
+                      toast.success(
+                        result?.data?.message || "Signed up successfully"
+                      );
+                      setTimeout(() => {
+                        router.push("/signin");
+                      }, 2000);
+                    }
+                  } else {
+                    setLoading(false);
+                    toast.error(
+                      result?.response?.data?.message || "Something went wrong"
+                    );
+                  }
+                }}
+              >
                 <FormInput
                   label={"Your username"}
                   name={"username"}
@@ -92,14 +99,14 @@ export default function Signup() {
                   onChange={handleChange}
                   value={form.confPassword}
                 />
-                <button type="submit" className="formButton">
+                <Button type="submit" disabled={loading}>
                   Create account
-                </button>
+                </Button>
               </form>
             </div>
             <p className="mt-10 text-center">
               Already own an account?
-              <Link href="/signin" className="text-blue-700">
+              <Link href="/auth/signin" className="text-blue-700">
                 {" Sign In"}
               </Link>
             </p>
