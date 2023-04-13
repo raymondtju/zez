@@ -3,7 +3,6 @@ import { m } from "framer-motion";
 import clsx from "clsx";
 
 import {
-  ArrowRightCircleIcon,
   ArrowRightIcon,
   LinkIcon,
   QrCodeIcon,
@@ -90,7 +89,7 @@ export default function Header() {
             }}
             value={url}
           />
-          <m.button
+          <button
             className={clsx(
               `whitespace-nowrap rounded-full bg-primary p-2 font-light text-white`,
               `transition-all duration-300 ease-in-out hover:scale-95 hover:bg-slate-800 focus:scale-105`,
@@ -102,7 +101,7 @@ export default function Header() {
           >
             <span className="sr-only">Short Link</span>
             <ArrowRightIcon className="h-5 w-5" />
-          </m.button>
+          </button>
         </div>
       </div>
       {shortUrl && (

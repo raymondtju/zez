@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import { Toaster, toast } from "react-hot-toast";
 
-import IndexContent from "@/contents/index";
 import { useSelector } from "react-redux";
+import IndexContent from "@/components/contents/index";
 
 export default function Home() {
   // const user = useSelector((state) => state.user.username);

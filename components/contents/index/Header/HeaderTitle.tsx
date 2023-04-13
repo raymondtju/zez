@@ -32,27 +32,28 @@ function HeaderTitle() {
         "dark:text-zinc-100"
       )}
     >
-      <m.h1
+      <h1
         className={clsx(
           "flex select-none flex-wrap justify-center gap-y-[-10] gap-x-4 text-center font-chillax text-[85px] font-black uppercase -tracking-wider",
-          "md:text-[105px]"
+          "leading-[70px] md:text-[105px] md:leading-[80px]"
         )}
-        variants={container}
-        initial="hidden"
-        animate="visible"
+        // variants={container}
+        // initial="hidden"
+        // animate="visible"
       >
-        {"SHORT SHARE TRACK".split(" ").map((word, index) => {
+        {/* {"SHORT SHARE TRACK".split(" ").map((word, index) => {
           return (
             <m.span
               variants={item}
               key={index}
-              className="leading-[70px] md:leading-[80px]"
+              className=""
             >
               {word + " "}
             </m.span>
           );
-        })}
-      </m.h1>
+        })} */}
+        SHORT SHARE TRACK
+      </h1>
       <p
         className={clsx(
           `mx-auto mt-4 text-center text-xl font-bold leading-none md:text-2xl`

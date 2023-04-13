@@ -18,8 +18,10 @@ export const config = {
 export default async function middleware(
   req: NextRequest
 ): Promise<NextResponse> {
+  console.log(1);
   const path = req.nextUrl.pathname.split("/")[1];
   if (["favicon.ico", "api", ""].includes(path)) {
+    console.log(2);
     return NextResponse.next();
   }
   const check = await fetch(
