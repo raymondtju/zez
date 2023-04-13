@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { m } from "framer-motion";
 import clsx from "clsx";
 
@@ -29,36 +29,38 @@ export default function Header() {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  async function handleClick(e: any): Promise<void> {
-    setLoading(true);
-    setError("");
-    setShortUrl("");
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setLoading(true);
+      setError("");
+      setShortUrl("");
 
-    const result = await postData("/api/v1/url/create", {
-      originalUrl: `${url}`,
-    });
+      const result = await postData("/api/v1/url/create", {
+        originalUrl: `${url}`,
+      });
 
-    if (result?.data) {
-      setTimeout(() => {
-        setShortUrl(
-          `${process.env.NEXT_PUBLIC_DEV_BASE_URL}/${result.data.result.urlId}`
-        );
-        qr.update({
-          data: `${shortUrl}`,
-        });
-        setLoading(false);
-        setTemurl(url);
-        seturl("");
-      }, 500);
-    } else {
-      setTimeout(() => {
-        setError(result.response?.data?.message || "Something went wrong");
-        setLoading(false);
-      }, 500);
-    }
-
-    e.preventDefault();
-  }
+      if (result?.data) {
+        setTimeout(() => {
+          setShortUrl(
+            `${process.env.NEXT_PUBLIC_DEV_BASE_URL}/${result.data.result.urlId}`
+          );
+          qr.update({
+            data: `${shortUrl}`,
+          });
+          setLoading(false);
+          setTemurl(url);
+          seturl("");
+        }, 500);
+      } else {
+        setTimeout(() => {
+          setError(result.response?.data?.message || "Something went wrong");
+          setLoading(false);
+        }, 500);
+      }
+    },
+    [qr, shortUrl, url]
+  );
 
   function handleGenerate() {
     qr.append(ref.current);
@@ -74,7 +76,10 @@ export default function Header() {
           "dark:border-zinc-100 dark:bg-zinc-900 dark:text-zinc-100 "
         )}
       >
-        <div className="flex flex-row items-center justify-between gap-4">
+        <form
+          className="flex flex-row items-center justify-between gap-4"
+          onSubmit={handleSubmit}
+        >
           <LinkIcon className="h-6 w-6" />
           <input
             className={clsx(
@@ -82,7 +87,7 @@ export default function Header() {
               `focus:outline-none`,
               "dark:bg-transparent"
             )}
-            type="text"
+            type="url"
             placeholder="https://example.com"
             onChange={(e) => {
               seturl(e.target.value);
@@ -96,14 +101,15 @@ export default function Header() {
               `${loading && "disabled cursor-not-allowed"}`,
               "dark:bg-zinc-100 dark:text-zinc-900"
             )}
-            onClick={handleClick}
+            type="submit"
             disabled={loading}
           >
-            <span className="sr-only">Short Link</span>
+            <span className="sr-only">Shorten</span>
             <ArrowRightIcon className="h-5 w-5" />
           </button>
-        </div>
+        </form>
       </div>
+
       {shortUrl && (
         <m.div
           className={clsx(
