@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { redis } from "./lib/upstash";
 
 export const config = {
   matcher: [
@@ -11,27 +12,17 @@ export const config = {
      * 5. /_vercel (Vercel internals)
      * 6. all root files inside /public (e.g. /favicon.ico)
      */
-    "/((?!api/|_next/|_proxy/|index.js/|_app.js/|_document.js/|_auth/|_root/|_static|_vercel|[\\w-]+\\.\\w+).*)",
+    "/((?!api/|_next/|_proxy/|index.js/|_app.js/|_document.js/|_root/|auth/|_static|_vercel|[\\w-]+\\.\\w+).*)",
   ],
 };
 
-export default async function middleware(
-  req: NextRequest
-): Promise<NextResponse> {
-  console.log(1);
+export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname.split("/")[1];
-  if (["favicon.ico", "api", ""].includes(path)) {
-    console.log(2);
+  if (["favicon.ico", "api", "", "/auth"].includes(path)) {
     return NextResponse.next();
   }
-  const check = await fetch(
-    `${process.env.NEXT_PUBLIC_DEV_BE_API}/api/v1/url/${path}`,
-    {
-      method: "GET",
-    }
-  ).then((res) => res.json());
-  if (!check.result) {
-    return;
-  }
-  return NextResponse.redirect(check.result.originalUrl);
+
+  const find = await redis.get(`${process.env.NEXT_PUBLIC_BASE_URL}:${path}`);
+  if (!find) return;
+  else return NextResponse.redirect(find.url);
 }
