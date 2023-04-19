@@ -7,22 +7,28 @@ interface IButton
     HTMLButtonElement
   > {
   children: ReactNode;
+  loading?: boolean;
 }
 
-const Button: React.FC<IButton> = ({ children, disabled, ...props }) => {
+const Button: React.FC<IButton> = ({
+  children,
+  disabled,
+  loading,
+  className,
+  ...props
+}) => {
   return (
     <button
-      className="w-full rounded-lg bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-500 sm:w-auto"
+      className={`w-full rounded-lg bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-500 sm:w-auto ${className}`}
       disabled={disabled}
       {...props}
     >
-      {disabled ? (
+      {loading && (
         <p>
           <LoadingIcon />
         </p>
-      ) : (
-        <>{children}</>
       )}
+      {children}
     </button>
   );
 };

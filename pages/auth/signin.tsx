@@ -7,10 +7,13 @@ import Cookies from "js-cookie";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
+import { signIn } from "next-auth/react";
+
 import Layout from "@/components/Layout";
 import FormInput from "@/components/FormInput";
 import { postData } from "@/utils";
 import { setUsername } from "@/state/user/slice";
+import Button from "@/components/Button";
 
 export default function Signin() {
   const dispatch = useDispatch();
@@ -42,7 +45,6 @@ export default function Signin() {
         token = result.data.token;
         Cookies.set("token", token);
         dispatch(setUsername(form.username));
-        localStorage.setItem("username", form.username);
         toast.success(result?.data?.message || "Signed in successfully");
         setTimeout(() => {
           router.push("/");
@@ -84,10 +86,14 @@ export default function Signin() {
                   onChange={handleChange}
                   value={form.password}
                 />
-                <button type="submit" className="formButton">
+                <Button type="submit" disabled={true}>
                   Submit
-                </button>
+                </Button>
               </form>
+
+              <Button onClick={() => signIn("google")} className="mt-4">
+                Signin with google
+              </Button>
             </div>
             <p className="mt-10 text-center">
               Need an account?

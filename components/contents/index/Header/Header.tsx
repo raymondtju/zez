@@ -36,14 +36,21 @@ export default function Header() {
       setError("");
       setShortUrl("");
 
-      const result = await postData("/api/v1/url/create", {
-        originalUrl: `${url}`,
+      const postData = await fetch("/api/url/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url,
+        }),
       });
+      const result = await postData.json();
 
-      if (result?.data) {
+      if (postData.status === 201) {
         setTimeout(() => {
           setShortUrl(
-            `${process.env.NEXT_PUBLIC_DEV_BASE_URL}/${result.data.result.urlId}`
+            `${process.env.NEXT_PUBLIC_BASE_URL}/${result?.data?.urlId}`
           );
           qr.update({
             data: `${shortUrl}`,
@@ -54,7 +61,7 @@ export default function Header() {
         }, 500);
       } else {
         setTimeout(() => {
-          setError(result.response?.data?.message || "Something went wrong");
+          setError(result?.response?.data?.message || "Something went wrong");
           setLoading(false);
         }, 500);
       }
@@ -80,7 +87,7 @@ export default function Header() {
           className="flex flex-row items-center justify-between gap-4"
           onSubmit={handleSubmit}
         >
-          <LinkIcon className="h-6 w-6" />
+          <LinkIcon className="w-6 h-6" />
           <input
             className={clsx(
               `w-full bg-zinc-100`,
@@ -105,7 +112,7 @@ export default function Header() {
             disabled={loading}
           >
             <span className="sr-only">Shorten</span>
-            <ArrowRightIcon className="h-5 w-5" />
+            <ArrowRightIcon className="w-5 h-5" />
           </button>
         </form>
       </div>
@@ -145,7 +152,7 @@ export default function Header() {
             )}
           >
             <a
-              className="decoration-3 hover: underline underline-offset-2 hover:decoration-4"
+              className="underline decoration-3 hover: underline-offset-2 hover:decoration-4"
               href={shortUrl}
               target="_blank"
               rel="noreferrer"
@@ -154,13 +161,13 @@ export default function Header() {
             </a>
             <div className="flex items-center space-x-2">
               <ClipboardCopy text={shortUrl} />
-              <ShareIcon className="h-5 w-5 " />
+              <ShareIcon className="w-5 h-5 " />
               <button onClick={handleGenerate}>
-                <QrCodeIcon className="h-6 w-6" />
+                <QrCodeIcon className="w-6 h-6" />
               </button>
             </div>
           </div>
-          <div ref={ref} className="rounded-3xl border-2" />
+          <div ref={ref} className="border-2 rounded-3xl" />
         </m.div>
       )}
 

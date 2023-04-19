@@ -1,11 +1,9 @@
 import Layout from "@/components/Layout";
-import Header from "./header/Header";
 
-import clsx from "clsx";
 import Footer from "@/components/Footer";
+import Header from "./Header/Header";
 
 export default function IndexContent() {
-  // const texts = `kraa.cc kraa.cc kraa.cc kraa.cc`;
   return (
     <>
       <Layout>

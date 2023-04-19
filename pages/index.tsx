@@ -4,8 +4,11 @@ import { Toaster, toast } from "react-hot-toast";
 
 import { useSelector } from "react-redux";
 import IndexContent from "@/components/contents/index";
+import Navbar from "@/components/Navbar";
+import { GetServerSideProps } from "next";
+import { getCurrentUser } from "@/lib/auth";
 
-export default function Home() {
+export default function Home({ session }) {
   // const user = useSelector((state) => state.user.username);
   // const [username, setUsername] = useState(null);
 
@@ -39,9 +42,19 @@ export default function Home() {
             }}
           />
         )} */}
+        <Navbar session={session} />
         <IndexContent />
         {/* <Footer /> */}
       </main>
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getCurrentUser(context.req, context.res);
+  return {
+    props: {
+      session,
+    },
+  };
+};

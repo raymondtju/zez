@@ -24,8 +24,9 @@ interface CardLinkProps {
   reach: number;
   createdAt: string;
   handleDelete: () => void;
-  handleGenerate: () => void;
+  handleGenerate?: () => void;
   handleEdit: () => void;
+  key: string 
 }
 
 function CardLink({
@@ -35,7 +36,7 @@ function CardLink({
   createdAt,
   handleDelete,
   handleGenerate,
-  handleEdit,
+  handleEdit, key
 }: CardLinkProps) {
   return (
     <m.div
@@ -51,32 +52,32 @@ function CardLink({
         target="_blank"
       >
         <span className="flex flex-row items-center gap-1">
-          <LinkIcon className="h-5 w-5" />
+          <LinkIcon className="w-5 h-5" />
           kraa.cc/{urlId}
         </span>
       </Link>
       <span className="text-sm font-medium text-gray-400">{originalUrl}</span>
 
-      <div className="mt-2 flex items-center justify-between">
+      <div className="flex items-center justify-between mt-2">
         <p className="text-sm font-medium">
           Clicks : <span className="text-lg font-bold">{reach}</span>
         </p>
         <div className="flex items-center gap-1">
           <button onClick={handleGenerate}>
-            <QrCodeIcon className="h-5 w-5" />
+            <QrCodeIcon className="w-5 h-5" />
           </button>
           <button onClick={handleEdit}>
-            <PencilSquareIcon className="h-5 w-5" />
+            <PencilSquareIcon className="w-5 h-5" />
           </button>
           <button>
-            <TrashIcon className="h-5 w-5" onClick={handleDelete} />
+            <TrashIcon className="w-5 h-5" onClick={handleDelete} />
           </button>
         </div>
       </div>
 
       <div className="my-3 border-b-[0.5px] border-gray-400"></div>
       <div className="flex items-center gap-1 text-xs font-bold text-gray-400">
-        <ClockIcon className="h-4 w-4" />
+        <ClockIcon className="w-4 h-4" />
         <span>{createdAt}</span>
       </div>
     </m.div>

@@ -18,8 +18,9 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { useAppDispatch, useAppSelector } from "@/hooks";
+import { signOut } from "next-auth/react";
 
-export default function Navbar() {
+export default function Navbar({ session }) {
   let theme = useAppSelector((state) => state.theme.value);
 
   const dispatch = useAppDispatch();
@@ -30,16 +31,16 @@ export default function Navbar() {
 
   const root = router.pathname === "/";
 
-  useEffect(() => {
-    Cookies.get("token") ? setIsToken(true) : setIsToken(false);
-  }, [root, isToken]);
+  // useEffect(() => {
+  //   Cookies.get("token") ? setIsToken(true) : setIsToken(false);
+  // }, [root, isToken]);
 
-  const handleLogout = () => {
-    Cookies.remove("token");
-    dispatch(setUsername(null));
-    localStorage.removeItem("username");
-    router.reload();
-  };
+  // const handleLogout = () => {
+  //   Cookies.remove("token");
+  //   dispatch(setUsername(null));
+  //   localStorage.removeItem("username");
+  //   router.reload();
+  // };
 
   useEffect(() => {
     if (theme) {
@@ -88,7 +89,7 @@ export default function Navbar() {
                 <Link href="/auth/signin">
                   <button
                     className={clsx(
-                      `border-spacing-0 rounded-full border-2 border-primary bg-zinc-100 py-2 px-5 font-bold text-primary`,
+                      `border-spacing-0 rounded-full border-2 border-primary bg-zinc-100 px-5 py-2 font-bold text-primary`,
                       "duration-300 hover:border-2 hover:bg-primary hover:text-zinc-100",
                       "dark:border-2 dark:border-zinc-100 dark:bg-primary dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-primary"
                     )}
@@ -104,7 +105,7 @@ export default function Navbar() {
                 <Link href="/signin">
                   <button
                     className={clsx(
-                      `border-spacing-0 rounded-full border-2 border-primary bg-zinc-100 py-2 px-5 font-bold text-primary`,
+                      `border-spacing-0 rounded-full border-2 border-primary bg-zinc-100 px-5 py-2 font-bold text-primary`,
                       "duration-300 hover:border-2 hover:bg-primary hover:text-zinc-100",
                       "dark:border-2 dark:border-zinc-100 dark:bg-primary dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-primary"
                     )}
@@ -120,7 +121,7 @@ export default function Navbar() {
                 <Link href="/signup">
                   <button
                     className={clsx(
-                      `border-spacing-0 rounded-full border-2 border-primary bg-zinc-100 py-2 px-5 font-bold text-primary`,
+                      `border-spacing-0 rounded-full border-2 border-primary bg-zinc-100 px-5 py-2 font-bold text-primary`,
                       "duration-300 hover:border-2 hover:bg-primary hover:text-zinc-100",
                       "dark:border-2 dark:border-zinc-100 dark:bg-primary dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-primary"
                     )}
@@ -204,7 +205,7 @@ export default function Navbar() {
                           "duration-300 hover:bg-zinc-900 hover:text-zinc-100 ",
                           "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:border-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
                         )}
-                        onClick={handleLogout}
+                        onClick={() => signOut({ callbackUrl: "/" })}
                       >
                         <span>
                           <ArrowLeftOnRectangleIcon className="h-6 w-6" />
