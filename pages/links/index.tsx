@@ -9,7 +9,6 @@ import { getCurrentUser } from "@/lib/auth";
 import { fetcher } from "@/lib/utils";
 import LinksContainer from "@/components/links/LinksContainer";
 import Navbar from "@/components/Navbar";
-import { GetServerSideProps } from "next";
 
 export default function Links({ session }) {
   const { data, mutate, isLoading, error } = useSWR("/api/url", fetcher);
@@ -18,17 +17,17 @@ export default function Links({ session }) {
 
   const [keyword, setKeyword] = useState("");
 
-  const [dataa, setDataa] = useState(data);
-  useEffect(() => {
-    if (keyword) {
-      const fil = data?.filter((item: { urlId: string }) => {
-        return item.urlId.toLowerCase().includes(keyword);
-      });
-      setDataa(fil);
-    } else {
-      setDataa(data);
-    }
-  }, [keyword, data]);
+  // const [dataa, setDataa] = useState(data);
+  // useEffect(() => {
+  //   if (keyword) {
+  //     const fil = data?.filter((item: { urlId: string }) => {
+  //       return item.urlId.toLowerCase().includes(keyword);
+  //     });
+  //     setDataa(fil);
+  //   } else {
+  //     setDataa(data);
+  //   }
+  // }, [keyword, data]);
 
   return (
     <>

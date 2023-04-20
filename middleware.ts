@@ -22,7 +22,9 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const find = await redis.get(`${process.env.NEXT_PUBLIC_BASE_URL}:${path}`);
+  const find: { url: string } = await redis.get(
+    `${process.env.NEXT_PUBLIC_BASE_URL}:${path}`
+  );
   if (!find) return;
   else return NextResponse.redirect(find.url);
 }
