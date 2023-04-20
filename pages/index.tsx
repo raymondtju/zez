@@ -4,6 +4,8 @@ import { getCurrentUser } from "@/lib/auth";
 import IndexContent from "@/components/contents/index";
 import Navbar from "@/components/Navbar";
 import { getToken } from "next-auth/jwt";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 export default function Home({ session }) {
   console.log(session);
@@ -26,6 +28,8 @@ export default function Home({ session }) {
 
 export async function getServerSideProps({ req, res }) {
   const session = await getCurrentUser(req, res);
+  const sessions = await getServerSession(req, res, authOptions);
+  console.log("sessions", sessions);
   return {
     props: {
       session,
