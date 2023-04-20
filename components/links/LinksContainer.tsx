@@ -1,15 +1,16 @@
+import { Fragment, useEffect, useRef, useState } from "react";
 import { m } from "framer-motion";
-import CardLink from "../Card/CardLink";
+import clsx from "clsx";
 import { LinkIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
+import { Dialog, Transition } from "@headlessui/react";
+
 import { removeData } from "@/utils";
 import { formatDate } from "@/utils/formatDate";
-import { Dialog, Transition } from "@headlessui/react";
 import { useQrCode } from "@/helpers/useQrCode";
-import { Fragment, useEffect, useRef, useState } from "react";
-import clsx from "clsx";
+import LinksCard from "./LinksCard";
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -31,7 +32,7 @@ const LinksContainer = ({
   loading: boolean;
 }) => {
   const router = useRouter();
-  async function handleDelete(id: string): Promise<void> {
+  async function handleDelete(id: string) {
     const res = await toast.promise(removeData(`/api/v1/url/remove/${id}`), {
       loading: "Deleting...",
       success: "Deleted",
@@ -144,16 +145,17 @@ const LinksContainer = ({
             >
               {data.map((item) => (
                 <div key={item.urlId}>
-                  <CardLink
+                  <LinksCard
                     key={item._id}
                     urlId={item.urlId}
                     createdAt={formatDate(item.createdAt)}
                     reach={item.reach}
-                    originalUrl={item.originalUrl}
+                    url={item.url}
                     handleDelete={() => handleDelete(item._id)}
                     handleGenerate={() => {
-                      setTarget("https://kraa.cc/" + item.urlId);
-                      // console.log("item.shortUrl", item.shortUrl);
+                      setTarget(
+                        process.env.NEXT_PUBLIC_BASE_URL + "/" + item.urlId
+                      );
                       setOpen(!open);
                     }}
                     handleEdit={() => {

@@ -8,6 +8,8 @@ import Layout from "@/components/Layout";
 import { postData } from "@/utils";
 import FormInput from "@/components/FormInput";
 import { GetServerSideProps } from "next";
+import Navbar from "@/components/Navbar";
+import { getCurrentUser } from "@/lib/auth";
 
 export default function Signup() {
   const router = useRouter();
@@ -54,6 +56,7 @@ export default function Signup() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Navbar />
         <Layout>
           {alert && <Toaster />}
           <div className="mx-auto mt-20 max-w-md">
@@ -99,7 +102,7 @@ export default function Signup() {
             </div>
             <p className="mt-10 text-center">
               Already own an account?
-              <Link href="/signin" className="text-blue-700">
+              <Link href="/auth/signin" className="text-blue-700">
                 {" Sign In"}
               </Link>
             </p>
@@ -110,10 +113,9 @@ export default function Signup() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { req } = context;
-  const { token } = req.cookies;
-  if (token) {
+export const getServerSideProps = async (context) => {
+  const session = await getCurrentUser(context.req, context.res);
+  if (session) {
     return {
       redirect: {
         destination: "/",

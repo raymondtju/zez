@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Cookies from "js-cookie";
 import clsx from "clsx";
 
 import Layout from "../Layout";
 import { toogleTheme } from "@/state/theme/slice";
-import { setUsername } from "@/state/user/slice";
 import {
   ArrowLeftOnRectangleIcon,
   Bars2Icon,
@@ -20,7 +18,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { signOut } from "next-auth/react";
 
-export default function Navbar({ session }) {
+export default function Navbar({ session }: { session?: any }) {
   let theme = useAppSelector((state) => state.theme.value);
 
   const dispatch = useAppDispatch();
@@ -31,16 +29,9 @@ export default function Navbar({ session }) {
 
   const root = router.pathname === "/";
 
-  // useEffect(() => {
-  //   Cookies.get("token") ? setIsToken(true) : setIsToken(false);
-  // }, [root, isToken]);
-
-  // const handleLogout = () => {
-  //   Cookies.remove("token");
-  //   dispatch(setUsername(null));
-  //   localStorage.removeItem("username");
-  //   router.reload();
-  // };
+  useEffect(() => {
+    session ? setIsToken(true) : setIsToken(false);
+  }, [session]);
 
   useEffect(() => {
     if (theme) {
@@ -100,9 +91,9 @@ export default function Navbar({ session }) {
               </div>
             )}
 
-            {router.pathname === "/signup" && (
+            {router.pathname === "/auth/signup" && (
               <div className="flex items-center gap-4">
-                <Link href="/signin">
+                <Link href="/auth/signin">
                   <button
                     className={clsx(
                       `border-spacing-0 rounded-full border-2 border-primary bg-zinc-100 px-5 py-2 font-bold text-primary`,
@@ -116,9 +107,9 @@ export default function Navbar({ session }) {
               </div>
             )}
 
-            {router.pathname === "/signin" && (
+            {router.pathname === "/auth/signin" && (
               <div className="flex items-center gap-4">
-                <Link href="/signup">
+                <Link href="/auth/signup">
                   <button
                     className={clsx(
                       `border-spacing-0 rounded-full border-2 border-primary bg-zinc-100 px-5 py-2 font-bold text-primary`,

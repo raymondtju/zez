@@ -1,4 +1,3 @@
-import React from "react";
 import { m } from "framer-motion";
 import Link from "next/link";
 import clsx from "clsx";
@@ -18,26 +17,27 @@ const containerItem = {
   },
 };
 
-interface CardLinkProps {
+interface props {
   urlId: string;
-  originalUrl: string;
+  url: string;
   reach: number;
   createdAt: string;
   handleDelete: () => void;
   handleGenerate?: () => void;
   handleEdit: () => void;
-  key: string 
+  key: string;
 }
 
-function CardLink({
+function LinksCard({
   urlId,
-  originalUrl,
+  url,
   reach,
   createdAt,
   handleDelete,
   handleGenerate,
-  handleEdit, key
-}: CardLinkProps) {
+  handleEdit,
+  key,
+}: props) {
   return (
     <m.div
       className={clsx(
@@ -52,36 +52,36 @@ function CardLink({
         target="_blank"
       >
         <span className="flex flex-row items-center gap-1">
-          <LinkIcon className="w-5 h-5" />
-          kraa.cc/{urlId}
+          <LinkIcon className="h-5 w-5" />
+          {process.env.NEXT_PUBLIC_BASE_URL}/{urlId}
         </span>
       </Link>
-      <span className="text-sm font-medium text-gray-400">{originalUrl}</span>
+      <span className="text-sm font-medium text-gray-400">{url}</span>
 
-      <div className="flex items-center justify-between mt-2">
+      <div className="mt-2 flex items-center justify-between">
         <p className="text-sm font-medium">
           Clicks : <span className="text-lg font-bold">{reach}</span>
         </p>
         <div className="flex items-center gap-1">
           <button onClick={handleGenerate}>
-            <QrCodeIcon className="w-5 h-5" />
+            <QrCodeIcon className="h-5 w-5" />
           </button>
           <button onClick={handleEdit}>
-            <PencilSquareIcon className="w-5 h-5" />
+            <PencilSquareIcon className="h-5 w-5" />
           </button>
           <button>
-            <TrashIcon className="w-5 h-5" onClick={handleDelete} />
+            <TrashIcon className="h-5 w-5" onClick={handleDelete} />
           </button>
         </div>
       </div>
 
       <div className="my-3 border-b-[0.5px] border-gray-400"></div>
       <div className="flex items-center gap-1 text-xs font-bold text-gray-400">
-        <ClockIcon className="w-4 h-4" />
+        <ClockIcon className="h-4 w-4" />
         <span>{createdAt}</span>
       </div>
     </m.div>
   );
 }
 
-export default CardLink;
+export default LinksCard;

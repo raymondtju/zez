@@ -8,8 +8,10 @@ import { Toaster } from "react-hot-toast";
 import { getCurrentUser } from "@/lib/auth";
 import { fetcher } from "@/lib/utils";
 import LinksContainer from "@/components/links/LinksContainer";
+import Navbar from "@/components/Navbar";
+import { GetServerSideProps } from "next";
 
-export default function Links() {
+export default function Links({ session }) {
   const { data, mutate, isLoading, error } = useSWR("/api/url", fetcher);
   console.log(data);
   console.log(isLoading);
@@ -38,6 +40,7 @@ export default function Links() {
       </Head>
       <main>
         <Toaster />
+        <Navbar session={session} />
         <Layout>
           <h1 className="mt-8 text-2xl font-bold tracking-tighter">
             list of your link
@@ -72,6 +75,6 @@ export async function getServerSideProps(context) {
     };
   }
   return {
-    props: {},
+    props: { session },
   };
 }

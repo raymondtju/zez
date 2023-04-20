@@ -25,9 +25,7 @@ export default async function handler(
           { ex: 60 * 60 * 24 }
         );
         if (create == "OK") {
-          return res.status(201).json({
-            message: "Public link does expired in 1 day.",
-          });
+          return res.status(201).json({ data: { urlId }, expired: "1d" });
         } else
           return res.status(400).json({
             message: "Please try again.",

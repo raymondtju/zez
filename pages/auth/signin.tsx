@@ -14,6 +14,8 @@ import FormInput from "@/components/FormInput";
 import { postData } from "@/utils";
 import { setUsername } from "@/state/user/slice";
 import Button from "@/components/Button";
+import Navbar from "@/components/Navbar";
+import { getCurrentUser } from "@/lib/auth";
 
 export default function Signin() {
   const dispatch = useDispatch();
@@ -64,6 +66,7 @@ export default function Signin() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Navbar />
         <Layout>
           {alert && <Toaster />}
           <div className="mx-auto mt-20 max-w-md">
@@ -97,7 +100,7 @@ export default function Signin() {
             </div>
             <p className="mt-10 text-center">
               Need an account?
-              <Link href="/signup" className="text-blue-700">
+              <Link href="/auth/signup" className="text-blue-700">
                 {" Create an account"}
               </Link>
             </p>
@@ -108,10 +111,9 @@ export default function Signin() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { req } = context;
-  const { token } = req.cookies;
-  if (token) {
+export const getServerSideProps = async (context) => {
+  const session = await getCurrentUser(context.req, context.res)
+  if (session) {
     return {
       redirect: {
         destination: "/",
