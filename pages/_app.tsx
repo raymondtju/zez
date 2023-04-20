@@ -1,9 +1,8 @@
 import "@/styles/globals.css";
-import Navbar from "@/components/Navbar";
 import { store } from "@/state/store";
 import { Provider } from "react-redux";
 import { LazyMotion, domAnimation } from "framer-motion";
-import { GetServerSideProps } from "next";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -11,6 +10,7 @@ export default function App({ Component, pageProps }) {
       <Provider store={store}>
         <LazyMotion features={domAnimation}>
           <Component {...pageProps} />
+          <Analytics />
         </LazyMotion>
       </Provider>
     </>
