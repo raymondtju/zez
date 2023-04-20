@@ -1,7 +1,8 @@
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getToken } from "next-auth/jwt";
 import { getServerSession } from "next-auth/next";
+
+import prisma from "@/lib/prismadb";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 export async function getCurrentUser(
   req: NextApiRequest,
@@ -9,18 +10,17 @@ export async function getCurrentUser(
 ) {
   try {
     const session = await getServerSession(req, res, authOptions);
-    const token = await getToken({ req });
-    if (session || token) {
-      const findUser = await prisma.user.findFirst({
+    if (session) {
+      const findUser = await prisma.user.findUnique({
         where: {
-          email: session.user.email || token.email,
+          email: session.user.email,
         },
       });
       if (!findUser) return null;
 
       return {
         id: findUser.id,
-        ...(session || token),
+        ...session,
       };
     }
 
