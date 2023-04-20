@@ -113,7 +113,7 @@ export default function Navbar({ session }: { session?: any }) {
             )} */}
 
             <button className="flex items-center" onClick={handleMenu}>
-              <Bars2Icon className="w-6 h-6" />
+              <Bars2Icon className="w-6 h-7" />
             </button>
             <div
               className={clsx(
