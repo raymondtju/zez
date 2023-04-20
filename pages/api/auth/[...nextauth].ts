@@ -17,7 +17,11 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
   },
-  debug: process.env.NODE_ENV === "development" ? true : false,
+  debug:
+    process.env.NODE_ENV === "development" ||
+    process.env.VERCEL_ENV === "development"
+      ? true
+      : false,
 };
 
 export default NextAuth(authOptions);

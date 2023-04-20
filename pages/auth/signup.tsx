@@ -113,8 +113,8 @@ export default function Signup() {
   );
 }
 
-export const getServerSideProps = async (context) => {
-  const session = await getCurrentUser(context.req, context.res);
+export const getServerSideProps = async ({ req, res }) => {
+  const session = await getCurrentUser(req, res);
   if (session) {
     return {
       redirect: {

@@ -5,6 +5,7 @@ import IndexContent from "@/components/contents/index";
 import Navbar from "@/components/Navbar";
 
 export default function Home({ session }) {
+  console.log(session);
   return (
     <>
       <Head>
@@ -22,8 +23,8 @@ export default function Home({ session }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const session = await getCurrentUser(context.req, context.res);
+export async function getServerSideProps({ req, res }) {
+  const session = await getCurrentUser(req, res);
   return {
     props: {
       session,

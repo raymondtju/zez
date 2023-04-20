@@ -63,8 +63,8 @@ export default function Links({ session }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const session = await getCurrentUser(context.req, context.res);
+export async function getServerSideProps({ req, res }) {
+  const session = await getCurrentUser(req, res);
   if (!session) {
     return {
       redirect: {

@@ -69,9 +69,9 @@ export default function Signin() {
         <Navbar />
         <Layout>
           {alert && <Toaster />}
-          <div className="mx-auto mt-20 max-w-md">
-            <h1 className="text-center text-4xl font-bold">Sign In</h1>
-            <div className="mt-5 flex flex-col">
+          <div className="max-w-md mx-auto mt-20">
+            <h1 className="text-4xl font-bold text-center">Sign In</h1>
+            <div className="flex flex-col mt-5">
               <form onSubmit={handleSubmit}>
                 <FormInput
                   label={"Your username"}
@@ -94,7 +94,10 @@ export default function Signin() {
                 </Button>
               </form>
 
-              <Button onClick={() => signIn("google")} className="mt-4">
+              <Button
+                onClick={() => signIn("google", { callbackUrl: "/" })}
+                className="mt-4"
+              >
                 Signin with google
               </Button>
             </div>
@@ -111,8 +114,8 @@ export default function Signin() {
   );
 }
 
-export const getServerSideProps = async (context) => {
-  const session = await getCurrentUser(context.req, context.res)
+export const getServerSideProps = async ({req,res}) => {
+  const session = await getCurrentUser(req, res);
   if (session) {
     return {
       redirect: {
