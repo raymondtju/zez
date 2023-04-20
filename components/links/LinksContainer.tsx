@@ -144,7 +144,7 @@ const LinksContainer = ({
               variants={container}
             >
               {data.map((item) => (
-                <div key={item.urlId}>
+                <Fragment key={item.urlId}>
                   <LinksCard
                     key={item._id}
                     urlId={item.urlId}
@@ -164,7 +164,7 @@ const LinksContainer = ({
                       // setEditModal(true);
                     }}
                   />
-                </div>
+                </Fragment>
               ))}
             </m.div>
           )}

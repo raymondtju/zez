@@ -48,29 +48,35 @@ function LinksCard({
     >
       <Link
         href={`/${urlId}`}
-        className="text-lg font-bold hover:underline hover:underline-offset-4"
+        className="text-base font-bold hover:underline hover:underline-offset-4 sm:text-lg"
         target="_blank"
       >
         <span className="flex flex-row items-center gap-1">
-          <LinkIcon className="h-5 w-5" />
-          {process.env.NEXT_PUBLIC_BASE_URL}/{urlId}
+          <LinkIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+          {process.env.NEXT_PUBLIC_BASE_URL.split("://")[1]}/{urlId}
         </span>
       </Link>
-      <span className="text-sm font-medium text-gray-400">{url}</span>
+      <span className="text-[12px] font-medium text-gray-400 sm:text-sm">
+        {url}
+      </span>
 
       <div className="mt-2 flex items-center justify-between">
-        <p className="text-sm font-medium">
-          Clicks : <span className="text-lg font-bold">{reach}</span>
+        <p className="text-[12px] font-medium sm:text-sm">
+          Clicks :{" "}
+          <span className="text-base font-bold sm:text-lg">{reach}</span>
         </p>
         <div className="flex items-center gap-1">
           <button onClick={handleGenerate}>
-            <QrCodeIcon className="h-5 w-5" />
+            <QrCodeIcon className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
           <button onClick={handleEdit}>
-            <PencilSquareIcon className="h-5 w-5" />
+            <PencilSquareIcon className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
           <button>
-            <TrashIcon className="h-5 w-5" onClick={handleDelete} />
+            <TrashIcon
+              className="h-4 w-4 sm:h-5 sm:w-5"
+              onClick={handleDelete}
+            />
           </button>
         </div>
       </div>
