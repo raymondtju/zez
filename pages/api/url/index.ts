@@ -14,7 +14,8 @@ export default async function handler(
     if (type == "public") {
       try {
         const scan = await redis.scan(0, {
-          count: 50
+          count: 50,
+          match: `${process.env.NEXT_PUBLIC_BASE_URL}*`
         })
         let get = scan[1];
         let data: PublicLinksProps[] = get.map((item) => ({
@@ -22,12 +23,6 @@ export default async function handler(
           url: "",
           exp: null
         }))
-        data = data.filter((element) => {
-          if (!element.key.includes((process.env.NEXT_PUBLIC_BASE_URL).split("://")[1])) {
-            return false; 
-          }
-          return true;
-        })
         
         for (const x in data) {
           const pipeline2 = redis.multi();
