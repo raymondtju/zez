@@ -50,14 +50,14 @@ function PublicLinks({session}) {
             animate="visible"
             variants={LinksContainer}
           >
-            {links ? links.map((link) => (
+            {links ? links.map((link, i) => (
               <m.div
                 className={clsx(
                   "flex flex-col overflow-hidden rounded-3xl border-2 border-zinc-900 p-3 px-5",
                   "dark:border-zinc-100"
                 )}
                 variants={ItemLinksContainer}
-                key={link.key}
+                key={i}
               >
                 <Link
                   href={`${process.env.NEXT_PUBLIC_BASE_URL}/${link.key}`}
