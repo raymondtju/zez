@@ -13,16 +13,16 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
   },
   debug:
-    process.env.NODE_ENV === "development" ||
-    process.env.VERCEL_ENV === "preview" ||
-    process.env.VERCEL_ENV === "development"
-      ? true
-      : false,
+  process.env.NODE_ENV === "development" ||
+  process.env.VERCEL_ENV === "preview" ||
+  process.env.VERCEL_ENV === "development"
+  ? true
+  : false,
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 export default NextAuth(authOptions);

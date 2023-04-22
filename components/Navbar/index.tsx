@@ -119,7 +119,7 @@ export default function Navbar({ session }: { session?: any }) {
               className={clsx(
                 "transition-all duration-300 ease-in-out",
                 `${
-                  isMenu ? "fixed inset-0 h-[100vh] backdrop-blur-sm bg-white/90" : "hidden"
+                  isMenu ? "fixed inset-0 min-h-[100vh] backdrop-blur-sm bg-zinc-100/90 dark:bg-zinc-900/90" : "hidden"
                 }`
               )}
             >

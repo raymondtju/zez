@@ -11,9 +11,9 @@ import {
 
 import { postData } from "@/utils";
 import ClipboardCopy from "@/helpers/ClipboardCopy";
-import HeaderTitle from "./HeaderTitle";
 
 import { useQrCode } from "@/helpers/useQrCode";
+import HeaderTitle from "./HeaderTitle";
 
 export default function Header() {
   const [url, seturl] = useState<string>("");
@@ -71,6 +71,7 @@ export default function Header() {
 
   function handleGenerate() {
     qr.append(ref.current);
+    console.log(shortUrl);
   }
 
   return (
@@ -157,7 +158,7 @@ export default function Header() {
               target="_blank"
               rel="noreferrer"
             >
-              {shortUrl}
+              {`${shortUrl.split("://")[1]}`}
             </a>
             <div className="flex items-center space-x-2">
               <ClipboardCopy text={shortUrl} />

@@ -27,6 +27,7 @@
     "@next-auth/prisma-adapter": "^1.0.5",
     "@next/font": "13.1.6",
     "@prisma/client": "^4.13.0",
+    "@radix-ui/react-popover": "^1.0.5",
     "@reduxjs/toolkit": "^1.9.3",
     "@types/js-cookie": "^3.0.3",
     "@upstash/redis": "^1.20.4",

@@ -27,20 +27,21 @@ const container = {
 const LinksContainer = ({
   data,
   loading,
+  mutate
 }: {
   data?: any;
-  loading: boolean;
+    loading: boolean;
+  mutate: () => void
 }) => {
   const router = useRouter();
   async function handleDelete(id: string) {
-    const res = await toast.promise(removeData(`/api/v1/url/remove/${id}`), {
+    const res = await toast.promise(fetch (`/api/url/${id}/delete`, {method: "DELETE"}), {
       loading: "Deleting...",
       success: "Deleted",
       error: "Failed to delete",
     });
-    if (res.status === 200) {
-      router.replace(router.asPath);
-    }
+    // if (res.status === 200) mutate();
+    mutate()
   }
 
   const qr: any = useQrCode();
@@ -79,10 +80,10 @@ const LinksContainer = ({
             }}
             className={clsx("relative z-10")}
           >
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity" />
+            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 backdrop-blur-sm" />
 
             <div className="fixed inset-0 z-10 overflow-y-auto">
-              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
                 <Transition
                   enter="ease-out duration-300"
                   enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
@@ -93,7 +94,7 @@ const LinksContainer = ({
                   show={open}
                   as={Fragment}
                 >
-                  <Dialog.Panel className="relative w-full transform overflow-hidden rounded-xl bg-white p-4 text-left shadow-xl transition-all sm:my-8 sm:w-fit sm:max-w-lg">
+                  <Dialog.Panel className="relative w-full p-4 overflow-hidden text-left transition-all transform bg-white shadow-xl rounded-xl sm:my-8 sm:w-fit sm:max-w-lg">
                     <Dialog.Title className="relative flex justify-center text-lg font-bold">
                       <span>your qr code</span>
                     </Dialog.Title>
@@ -102,15 +103,15 @@ const LinksContainer = ({
                     </Dialog.Description>
 
                     <div ref={ref} className="flex justify-center" />
-                    <div className="mt-4 flex justify-center font-bold">
+                    <div className="flex justify-center mt-4 font-bold">
                       <button
-                        className="mx-auto rounded-lg bg-zinc-900 px-4 py-1 text-zinc-100 hover:bg-zinc-600"
+                        className="px-4 py-1 mx-auto rounded-lg bg-zinc-900 text-zinc-100 hover:bg-zinc-600"
                         onClick={() => handleDownload()}
                       >
                         download
                       </button>
                       <button
-                        className="mx-auto rounded-lg border-2 border-zinc-900 px-4 py-1 text-center"
+                        className="px-4 py-1 mx-auto text-center border-2 rounded-lg border-zinc-900"
                         onClick={() => {
                           setOpen(false);
                           setTarget("");
@@ -127,7 +128,7 @@ const LinksContainer = ({
           {data?.length === 0 ? (
             <>
               <div className="flex flex-row items-center justify-center gap-1 ">
-                <LinkIcon className="h-5 w-5" />
+                <LinkIcon className="w-5 h-5" />
                 <span className="uppercase">No links found.</span>
                 <Link href="/">
                   <span className="font-bold text-blue-700 hover:underline hover:underline-offset-2">
@@ -138,7 +139,7 @@ const LinksContainer = ({
             </>
           ) : (
             <m.div
-              className="mt-4 grid gap-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
+              className="grid gap-4 mt-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
               initial="hidden"
               animate="visible"
               variants={container}
@@ -151,11 +152,9 @@ const LinksContainer = ({
                     createdAt={formatDate(item.createdAt)}
                     reach={item.reach}
                     url={item.url}
-                    handleDelete={() => handleDelete(item._id)}
+                    handleDelete={() => handleDelete(item.urlId)}
                     handleGenerate={() => {
-                      setTarget(
-                        process.env.NEXT_PUBLIC_BASE_URL + "/" + item.urlId
-                      );
+                      setTarget(`${process.env.NEXT_PUBLIC_BASE_URL}/${item.urlId}`);
                       setOpen(!open);
                     }}
                     handleEdit={() => {

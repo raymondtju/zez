@@ -95,7 +95,7 @@ export default function Signin() {
               </form>
 
               <Button
-                onClick={() => signIn("google", { callbackUrl: "/" })}
+                onClick={() => signIn("google", { callbackUrl: "/links" })}
                 className="mt-4"
               >
                 Signin with google

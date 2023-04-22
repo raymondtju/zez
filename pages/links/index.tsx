@@ -7,15 +7,13 @@ import Layout from "@/components/Layout";
 import { Toaster } from "react-hot-toast";
 import { getCurrentUser } from "@/lib/auth";
 import { fetcher } from "@/lib/utils";
-import LinksContainer from "@/components/links/LinksContainer";
+import LinksContainer from "@/components/pages/links/LinksContainer";
 import Navbar from "@/components/Navbar";
 
 export default function Links({ session }) {
   const { data, mutate, isLoading, error } = useSWR("/api/url", fetcher);
-  console.log(data);
-  console.log(isLoading);
 
-  const [keyword, setKeyword] = useState("");
+  // const [keyword, setKeyword] = useState("");
 
   // const [dataa, setDataa] = useState(data);
   // useEffect(() => {
@@ -46,17 +44,17 @@ export default function Links({ session }) {
           </h1>
 
           <div className="flex justify-end">
-            <div className="flex w-fit items-center rounded-lg bg-white p-2 text-black">
-              <MagnifyingGlassIcon className="h-5 w-5" />
+            <div className="flex items-center p-2 text-black bg-white rounded-lg w-fit">
+              <MagnifyingGlassIcon className="w-5 h-5" />
               <input
                 type="text"
-                onChange={(e) => setKeyword(e.target.value)}
+                // onChange={(e) => setKeyword(e.target.value)}
                 className="ml-2 focus:outline-none"
                 placeholder="search your link"
               />
             </div>
           </div>
-          <LinksContainer data={data} loading={isLoading} />
+          <LinksContainer data={data} loading={isLoading} mutate={mutate} />
         </Layout>
       </main>
     </>

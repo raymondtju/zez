@@ -45,7 +45,6 @@ export default async function handler(
       ]);
       if (redisStatus !== "OK")
         return res.status(400).send("Please try again later.");
-      console.log(create);
 
       return res.status(201).json({
         data: create,

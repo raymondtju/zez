@@ -1,14 +1,10 @@
 import Head from "next/head";
 
 import { getCurrentUser } from "@/lib/auth";
-import IndexContent from "@/components/contents/index";
 import Navbar from "@/components/Navbar";
-import { getToken } from "next-auth/jwt";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]";
+import IndexContent from "@/components/pages/home";
 
 export default function Home({ session }) {
-  console.log(session);
   return (
     <>
       <Head>
