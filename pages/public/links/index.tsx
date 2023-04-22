@@ -12,10 +12,10 @@ import clsx from "clsx";
 import Link from "next/link";
 import { ClockIcon, LinkIcon } from "@heroicons/react/24/solid";
 
-export interface PublicLinksProps {
-  key: string,
-  val: string,
-  exp: number
+export type PublicLinksProps = {
+  key?: string,
+  val?: string,
+  exp?: number
 }
 
 export async function getServerSideProps({ req, res }) {

@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prismadb";
 import { getCurrentUser } from "@/lib/auth";
 import { redis } from "@/lib/upstash";
+import { PublicLinksProps } from "@/pages/public/links";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,9 +14,15 @@ export default async function handler(
     if (type == "public") {
       try {
         const scan = await redis.scan(0)
-        let data = scan[1]
+        let get = scan[1]
+        let data: PublicLinksProps[] = get.map((item) => ({
+          key: item,
+          url: "",
+          exp: null
+        }))
+        console.log(data);
         data = data.filter((element) => {
-          if (!element.includes((process.env.NEXT_PUBLIC_BASE_URL).split("://")[1])) {
+          if (!element.key.includes((process.env.NEXT_PUBLIC_BASE_URL).split("://")[1])) {
             return false; 
           }
           return true;
@@ -23,20 +30,20 @@ export default async function handler(
         
         for (const x in data) {
           const pipeline2 = redis.multi();
-          pipeline2.ttl(data[x]);
-          pipeline2.get(data[x]);
-          const [exp, url] = await pipeline2.exec();
+          pipeline2.ttl(data[x].key);
+          pipeline2.get(data[x].key);
+          const [exp, url]: [number, { url: string }] = await pipeline2.exec();
 
           if (exp === -1) {
             delete data[x];
             continue
           }
           
-          data[x] = {   
-            key: data[x].split(":")[3],
+          data[x] = {
+            key: data[x].key.split(":")[3],
             val: url.url,
             exp
-          }
+          } as PublicLinksProps
         }
         return res.status(200).json(data);
       } catch (error) {
