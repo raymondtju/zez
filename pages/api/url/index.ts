@@ -13,14 +13,15 @@ export default async function handler(
   if (req.method === "GET") {
     if (type == "public") {
       try {
-        const scan = await redis.scan(0)
-        let get = scan[1]
+        const scan = await redis.scan(0, {
+          count: 50
+        })
+        let get = scan[1];
         let data: PublicLinksProps[] = get.map((item) => ({
           key: item,
           url: "",
           exp: null
         }))
-        console.log(data);
         data = data.filter((element) => {
           if (!element.key.includes((process.env.NEXT_PUBLIC_BASE_URL).split("://")[1])) {
             return false; 
@@ -33,7 +34,6 @@ export default async function handler(
           pipeline2.ttl(data[x].key);
           pipeline2.get(data[x].key);
           const [exp, url]: [number, { url: string }] = await pipeline2.exec();
-
           if (exp === -1) {
             delete data[x];
             continue
