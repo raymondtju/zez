@@ -35,7 +35,7 @@ export default async function handler(
           }
           
           data[x] = {
-            key: data[x].key.split(":")[3],
+            key: process.env.NODE_ENV === "development" ? data[x].key.split(":")[3] : data[x].key.split(":")[2],
             val: url.url,
             exp
           } as PublicLinksProps
