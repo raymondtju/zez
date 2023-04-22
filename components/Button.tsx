@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import LoadingIcon from "./icons/Loading";
+import LoadingIcon from "./ui/icons/Loading";
 
 interface IButton
   extends React.DetailedHTMLProps<

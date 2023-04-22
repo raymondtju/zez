@@ -9,6 +9,7 @@ import {
   ArrowLeftOnRectangleIcon,
   Bars2Icon,
   GiftIcon,
+  GlobeAltIcon,
   HomeIcon,
   LinkIcon,
   MoonIcon,
@@ -125,7 +126,7 @@ export default function Navbar({ session }: { session?: any }) {
             >
               {/* <div className="fixed inset-0 h-[100vh] bg-zinc-100/90 backdrop-blur-md transition-all dark:bg-zinc-900/90 w-screen" /> */}
               <Layout>
-                <div className="relative flex flex-col justify-end float-right gap-3 duration-300">
+                <div className="relative flex flex-col justify-end float-right gap-6 duration-300">
                   <button
                     className="absolute right-0 flex justify-end top-4"
                     onClick={handleMenu}
@@ -133,29 +134,44 @@ export default function Navbar({ session }: { session?: any }) {
                     <XMarkIcon className="w-6 h-6" />
                   </button>
 
-                  <button
-                    onClick={() => dispatch(toogleTheme())}
-                    className={clsx(
-                      "mt-14 w-fit rounded-xl border-2 border-zinc-900 p-4",
-                      "transition-all duration-300 ease-in-out hover:bg-zinc-900 hover:text-zinc-100",
-                      "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:border-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
-                    )}
-                  >
-                    {theme ? (
-                      <SunIcon className="w-6 h-6" />
-                    ) : (
-                      <MoonIcon className="w-6 h-6" />
-                    )}
+                  <div className="flex flex-row-reverse items-center gap-2">
+                    <button
+                      onClick={() => dispatch(toogleTheme())}
+                      className={clsx(
+                        "mt-14 w-fit rounded-xl border-2 border-zinc-900 p-4",
+                        "transition-all duration-300 ease-in-out hover:bg-zinc-900 hover:text-zinc-100",
+                        "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:border-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
+                      )}
+                    >
+                      {theme ? (
+                        <SunIcon className="w-6 h-6" />
+                      ) : (
+                        <MoonIcon className="w-6 h-6" />
+                      )}
 
-                    <span>{`Theme mode: ${theme ? "dark" : "light"}`}</span>
-                  </button>
+                      <span>{`Theme mode: ${theme ? "dark" : "light"}`}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        router.push("/public/links")
+                      }}
+                      className={clsx(
+                        "mt-14 w-fit rounded-xl border-2 border-zinc-900 p-4",
+                        "transition-all duration-300 ease-in-out hover:bg-zinc-900 hover:text-zinc-100",
+                        "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:border-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
+                      )}
+                    >
+                      <GlobeAltIcon className="w-6 h-6" />
+                      <span>Public Link</span>
+                    </button>
+                  </div>
 
                   {isToken && (
                     <div className="flex items-center gap-2">
                       <Link href="/dashboard">
                         <button
                           className={clsx(
-                            "mt-14 rounded-xl border-2 border-zinc-900 p-4",
+                            "rounded-xl border-2 border-zinc-900 p-4",
                             "duration-300 hover:bg-zinc-900 hover:text-zinc-100 ",
                             "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:border-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
                           )}
@@ -168,7 +184,7 @@ export default function Navbar({ session }: { session?: any }) {
                       <Link href="/links">
                         <button
                           className={clsx(
-                            "mt-14 rounded-xl border-2 border-zinc-900 p-4",
+                            "rounded-xl border-2 border-zinc-900 p-4",
                             "duration-300 hover:bg-zinc-900 hover:text-zinc-100 ",
                             "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:border-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
                           )}
@@ -181,7 +197,7 @@ export default function Navbar({ session }: { session?: any }) {
 
                       <button
                         className={clsx(
-                          "mt-14 rounded-xl border-2 border-zinc-900 p-4",
+                          "rounded-xl border-2 border-zinc-900 p-4",
                           "duration-300 hover:bg-zinc-900 hover:text-zinc-100 ",
                           "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:border-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
                         )}
