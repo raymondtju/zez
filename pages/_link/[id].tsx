@@ -31,7 +31,7 @@ export default function LinkPage({
 
 export async function getServerSideProps(context) {
   const { id } = context.params
-  const find = await redis.get(`${process.env.NEXT_PUBLIC_BASE_URL}:${id}`)
+  const find = await redis.get<{url: string}>(`${process.env.NEXT_PUBLIC_BASE_URL}:${id}`)
   if (!find) {
     return {
       notFound: true
