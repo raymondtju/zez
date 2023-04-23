@@ -40,6 +40,8 @@ export default async function handler(
             exp
           } as PublicLinksProps
         }
+        data = data.filter(Object)
+        
         return res.status(200).json(data);
       } catch (error) {
         return res.status(400).send(error);
