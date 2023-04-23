@@ -26,7 +26,7 @@ export async function getServerSideProps({ req, res }) {
 }
 
 function PublicLinks({session}) {
-  const { data: links } = useSWR<PublicLinksProps[]>("/api/url?type=public", fetcher);
+  const { data: links, isLoading: loading } = useSWR<PublicLinksProps[]>("/api/url?type=public", fetcher);
   
   return (
     <>
@@ -50,7 +50,7 @@ function PublicLinks({session}) {
             animate="visible"
             variants={LinksContainer}
           >
-            {links ? links.map((link, i) => (
+            {!loading ? links.map((link, i) => (
               <m.div
                 className={clsx(
                   "flex flex-col overflow-hidden rounded-3xl border-2 border-zinc-900 p-3 px-5",
