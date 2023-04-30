@@ -34,8 +34,8 @@ function HeaderTitle() {
     >
       <m.h1
         className={clsx(
-          "flex select-none flex-wrap justify-center gap-y-[-10] gap-x-4 text-center font-chillax text-[85px] font-black uppercase -tracking-wider",
-          "leading-[70px] md:text-[90px] md:leading-[80px]"
+          "flex select-none flex-wrap justify-center gap-y-[-10] gap-x-4 text-center font-chillax text-[60px] font-black uppercase -tracking-wider",
+          "leading-[70px] md:text-[70px] md:leading-[80px]"
         )}
         variants={container}
         initial="hidden"
@@ -51,7 +51,7 @@ function HeaderTitle() {
       </m.h1>
       <p
         className={clsx(
-          `mx-auto mt-3 text-center text-xl font-bold leading-none md:text-2xl`
+          `mx-auto text-center text-lg font-bold leading-none md:text-xl`
         )}
       >
         Say{" "}

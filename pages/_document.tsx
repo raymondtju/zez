@@ -8,7 +8,7 @@ export default function Document() {
       <Head />
       <body
         className={clsx(
-          `bg-zinc-100 font-satoshi selection:bg-zinc-900 selection:text-white`,
+          `bg-[#fafafa] font-satoshi selection:bg-zinc-900 selection:text-white`,
           "dark:bg-zinc-900",
           "duration-200 ease-in-out"
         )}

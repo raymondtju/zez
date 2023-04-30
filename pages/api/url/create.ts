@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 
 import prisma from "@/lib/prismadb";
 import { getCurrentUser } from "@/lib/auth";
+import { getMetatags } from "@/lib/metatags";
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,10 +16,13 @@ export default async function handler(
       if (!url) {
         return res.status(400).send("Field required");
       }
+      const meta = await getMetatags(url);
+      if (!meta) return res.status(400).send("Invalid URL");
 
       const urlId = nanoid(5);
       const session = await getCurrentUser(req, res);
       if (!session) {
+        console.log("public");
         const create = await redis.set(
           `${process.env.NEXT_PUBLIC_BASE_URL}:${urlId}`,
           { url },
@@ -39,6 +43,9 @@ export default async function handler(
             urlId,
             reach: 0,
             userId: session?.id,
+            title: meta.title as string || "",
+            description: meta.description as string || "",
+            image: meta.image as string || "",
           },
         }),
         redis.set(`${process.env.NEXT_PUBLIC_BASE_URL}:${urlId}`, { url }),
@@ -50,6 +57,7 @@ export default async function handler(
         data: create,
       });
     } catch (error) {
+      console.log(error);
       return res.status(500).send(error || "Internal server error");
     }
   } else {

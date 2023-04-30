@@ -15,6 +15,9 @@ model Url {
   userId      String?   @db.ObjectId
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  title       String
+  description String
+  image       String
 
   user         User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

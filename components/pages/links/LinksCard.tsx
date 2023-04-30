@@ -1,13 +1,11 @@
 import { m } from "framer-motion";
 import Link from "next/link";
 import clsx from "clsx";
-import {
-  ClockIcon,
-  LinkIcon,
-  PencilSquareIcon,
-  QrCodeIcon,
-  TrashIcon,
-} from "@heroicons/react/24/solid";
+import { Trash2, PencilIcon, QrCode, Clock1 } from "lucide-react";
+
+import Image from "next/image";
+import { useState } from "react";
+
 
 const containerItem = {
   hidden: { y: 20, opacity: 0 },
@@ -25,7 +23,6 @@ interface props {
   handleDelete: () => void;
   handleGenerate?: () => void;
   handleEdit: () => void;
-  key: string;
 }
 
 function LinksCard({
@@ -36,55 +33,75 @@ function LinksCard({
   handleDelete,
   handleGenerate,
   handleEdit,
-  key,
 }: props) {
+  const [editLink, setEditLink] = useState({
+    target: "",
+    value: "",
+    state: false
+  });
+ 
   return (
     <m.div
       className={clsx(
-        "flex flex-col overflow-hidden rounded-3xl border-2 border-zinc-900 p-3 px-5",
-        "dark:border-zinc-100"
+        "rounded-2xl bg-white sm:p-5 p-4 w-full overflow-hidden",
+        "dark:border-slate-100"
       )}
+      style={{
+        boxShadow: "rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px",
+      }}
       variants={containerItem}
     >
-      <Link
-        href={`/${urlId}`}
-        className="text-base font-bold hover:underline hover:underline-offset-4 sm:text-lg"
-        target="_blank"
-      >
-        <span className="flex flex-row items-center gap-1">
-          <LinkIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-          {process.env.NEXT_PUBLIC_BASE_URL.split("://")[1]}/{urlId}
-        </span>
-      </Link>
-      <span className="text-[12px] font-medium text-gray-400 sm:text-sm">
-        {url}
-      </span>
+      <div className="flex justify-between w-full">
+        <div className="flex flex-col w-4/5">
+          <div className="flex items-center">
+            <div className="flex items-center justify-center rounded-lg shrink-0 w-7 h-7 bg-slate-200">
+              <Image
+                src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}` || "https://s2.googleusercontent.com/s2/favicons?domain=https://google.com/"}
+                alt="web logo"
+                width={16}
+                height={16}
+              />
+            </div>
+            
+            <Link href={`${url}`} target="_blank">
+              <p className="pl-2 text-lg font-bold transition-all duration-300 hover:underline hover:underline-offset-[3px] hover:decoration-2 underline-offset-1 ease-in-out cursor-pointer">
+                {process.env.NEXT_PUBLIC_BASE_URL.split("://")[1]}/{urlId}
+              </p>
+            </Link>
+          </div>
+          
+          <span className="pt-0.5 text-sm break-words text-slate-500 line-clamp-2">{url}</span>
 
-      <div className="mt-2 flex items-center justify-between">
-        <p className="text-[12px] font-medium sm:text-sm">
-          Clicks :{" "}
-          <span className="text-base font-bold sm:text-lg">{reach}</span>
-        </p>
-        <div className="flex items-center gap-1">
-          <button onClick={handleGenerate}>
-            <QrCodeIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-          </button>
-          <button onClick={handleEdit}>
-            <PencilSquareIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-          </button>
-          <button>
-            <TrashIcon
-              className="h-4 w-4 sm:h-5 sm:w-5"
-              onClick={handleDelete}
-            />
-          </button>
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-sm font-medium">
+              Clicks : <span className="text-lg font-bold">{reach}</span>
+            </p>
+          </div>
+
+          {/* <div className="my-2 border-b-[1px] border-slate-900 md:my-3"></div> */}
+          <div className="flex items-center gap-1 text-xs font-medium text-slate-700">
+            <Clock1 className="w-3 h-3 md:h-4 md:w-4" />
+            <span>{createdAt}</span>
+          </div>
         </div>
-      </div>
 
-      <div className="my-3 border-b-[0.5px] border-gray-400"></div>
-      <div className="flex items-center gap-1 text-xs font-bold text-gray-400">
-        <ClockIcon className="h-4 w-4" />
-        <span>{createdAt}</span>
+        <ul className="my-auto shadow-md rounded-2xl">
+          <li>
+            <button className="p-2 duration-200 rounded-full hover:bg-slate-100">
+              <PencilIcon className="w-4 h-4 md:w-5 md:h-5 text-slate-700" />
+            </button>
+          </li>
+          <li>
+            <button onClick={handleGenerate} className="p-2 duration-200 rounded-full hover:bg-slate-100">
+              <QrCode className="w-4 h-4 md:w-5 md:h-5 text-slate-700" />
+            </button>
+          </li>
+          <li>
+            <button onClick={handleDelete} className="p-2 duration-200 rounded-full hover:bg-slate-100">
+              <Trash2 className="w-4 h-4 md:w-5 md:h-5 text-slate-700" />
+            </button>
+          </li>
+        </ul>
       </div>
     </m.div>
   );

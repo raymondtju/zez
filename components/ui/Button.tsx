@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import LoadingIcon from "./ui/icons/Loading";
+import LoadingIcon from "@/components/ui/icons/Loading";
 
 interface IButton
   extends React.DetailedHTMLProps<
@@ -19,7 +19,7 @@ const Button: React.FC<IButton> = ({
 }) => {
   return (
     <button
-      className={`w-full rounded-lg bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-slate-800 border-none disabled:cursor-not-allowed disabled:bg-slate-500 sm:w-auto ${className}`}
+      className={`w-full rounded-lg border-none bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-500 sm:w-auto ${className}`}
       disabled={disabled}
       {...props}
     >

@@ -3,12 +3,9 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import clsx from "clsx";
 
-import Layout from "../Layout";
 import { toogleTheme } from "@/state/theme/slice";
 import {
   ArrowLeftOnRectangleIcon,
-  Bars2Icon,
-  GiftIcon,
   GlobeAltIcon,
   HomeIcon,
   LinkIcon,
@@ -18,7 +15,9 @@ import {
 } from "@heroicons/react/24/solid";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { signOut } from "next-auth/react";
-import Button from "../Button";
+import { Menu } from "lucide-react";
+import Layout from "@/components/Layout";
+import Button from "@/components/ui/Button";
 
 export default function Navbar({ session }: { session?: any }) {
   let theme = useAppSelector((state) => state.theme.value);
@@ -52,7 +51,7 @@ export default function Navbar({ session }: { session?: any }) {
   return (
     <nav
       className={clsx(
-        "sticky top-0 z-10 w-full border-b-[1px] border-slate-600 bg-zinc-100/30 text-primary backdrop-blur-xl",
+        "sticky top-0 z-10 w-full bg-zinc-100/30 text-primary backdrop-blur-xl",
         "dark:border-zinc-100 dark:bg-primary/30 dark:text-zinc-100"
       )}
     >
@@ -60,16 +59,14 @@ export default function Navbar({ session }: { session?: any }) {
         <div className="flex items-center justify-between py-2">
           <div className="flex items-center gap-1">
             <Link href="/">
-              <h1 className="text-lg font-extrabold md:text-xl lg:text-2xl ">
-                kraa.cc
-              </h1>
+              <h1 className="text-2xl italic font-extrabold">zez.</h1>
             </Link>
-            <small className="flex items-end">(alpha)</small>
+            {/* <small className="flex items-end">(alpha)</small> */}
           </div>
 
           <div
             className={clsx(
-              `flex w-auto flex-row items-center sm:gap-x-6 gap-x-2 border-none sm:static`
+              `flex w-auto flex-row items-center gap-x-2 border-none sm:static sm:gap-x-6`
             )}
           >
             {/* <Link href={"https://github.com/raymondtju"} target="_blank">
@@ -88,11 +85,13 @@ export default function Navbar({ session }: { session?: any }) {
             >
               Get Started
             </button> */}
-            
+
             {router.pathname === "/" && !isToken && (
               <div className="flex items-center gap-4">
                 <Link href="/auth/signin">
-                  <Button className="px-3 py-1.5 sm:px-4 sm:py-2">Signin</Button>
+                  <Button className="px-3 py-1.5 sm:px-4 sm:py-2">
+                    Signin
+                  </Button>
                 </Link>
               </div>
             )}
@@ -114,13 +113,15 @@ export default function Navbar({ session }: { session?: any }) {
             )} */}
 
             <button className="flex items-center" onClick={handleMenu}>
-              <Bars2Icon className="w-6 h-6" />
+              <Menu className="w-6 h-6" />
             </button>
             <div
               className={clsx(
                 "transition-all duration-300 ease-in-out",
                 `${
-                  isMenu ? "fixed inset-0 min-h-[100vh] backdrop-blur-sm bg-zinc-100/90 dark:bg-zinc-900/90" : "hidden"
+                  isMenu
+                    ? "fixed inset-0 min-h-[100vh] bg-zinc-100/90 backdrop-blur-sm dark:bg-zinc-900/90"
+                    : "hidden"
                 }`
               )}
             >
@@ -153,7 +154,7 @@ export default function Navbar({ session }: { session?: any }) {
                     </button>
                     <button
                       onClick={() => {
-                        router.push("/public/links")
+                        router.push("/public/links");
                       }}
                       className={clsx(
                         "mt-14 w-fit rounded-xl border-2 border-zinc-900 p-4",

@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import Layout from "@/components/Layout";
 import { postData } from "@/utils";
-import FormInput from "@/components/FormInput";
+import FormInput from "@/components/ui/FormInput";
 import { GetServerSideProps } from "next";
 import Navbar from "@/components/Navbar";
 import { getCurrentUser } from "@/lib/auth";
@@ -53,17 +53,17 @@ export default function Signup() {
         <title>Sign Up</title>
         <meta name="description" content="Sign Up Page" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/zez.ico" />
       </Head>
       <main>
         <Navbar />
         <Layout>
           {alert && <Toaster />}
-          <div className="mx-auto mt-20 max-w-md">
-            <h1 className="text-center text-4xl font-bold">Sign Up</h1>
-            <div className="mt-5 flex flex-col">
+          <div className="max-w-md mx-auto mt-20">
+            <h1 className="text-4xl font-bold text-center">Sign Up</h1>
+            <div className="flex flex-col mt-5">
               <form onSubmit={handleSubmit}>
-                <FormInput
+                {/* <FormInput
                   label={"Your username"}
                   name={"username"}
                   type={"text"}
@@ -97,7 +97,7 @@ export default function Signup() {
                 />
                 <button type="submit" className="formButton">
                   Create account
-                </button>
+                </button> */}
               </form>
             </div>
             <p className="mt-10 text-center">
