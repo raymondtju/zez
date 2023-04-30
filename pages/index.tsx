@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth";
 import Navbar from "@/components/Navbar";
 import Header from "@/components/pages/home/Header";
 import Layout from "@/components/Layout";
+import { getMetatags } from "@/lib/metatags";
 
 export default function Home({ session }) {
   
@@ -27,7 +28,8 @@ export default function Home({ session }) {
 
 export async function getServerSideProps({ req, res }) {
   const session = await getCurrentUser(req, res);
-
+  const meta = await getMetatags("https://www.figma.com/community/file/914233657397286062")
+  console.log(meta);
   return {
     props: {
       session,
