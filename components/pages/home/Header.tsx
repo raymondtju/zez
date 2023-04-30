@@ -8,12 +8,16 @@ import {
   QrCodeIcon,
   ShareIcon,
 } from "@heroicons/react/24/solid";
-
-import { postData } from "@/utils";
-import ClipboardCopy from "@/helpers/ClipboardCopy";
-
-import { useQrCode } from "@/helpers/useQrCode";
 import HeaderTitle from "./HeaderTitle";
+import { Copy } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/Dialog";
+import { useQrCode } from "@/lib/helpers/useQrCode";
 
 export default function Header() {
   const [url, seturl] = useState<string>("");
@@ -21,13 +25,24 @@ export default function Header() {
   const [error, setError] = useState<string>(null);
   const [loading, setLoading] = useState(false);
   const [temurl, setTemurl] = useState<string>(null);
-  let qr = useQrCode();
 
-  useEffect(() => {
-    qr.update({ data: shortUrl });
-  }, [shortUrl, qr]);
+  const qr = useQrCode();
+  const ref = useRef(null);
+  const [open, setOpen] = useState(false);
 
-  const ref = useRef<HTMLDivElement>(null);
+  const handleGenerate = useCallback(
+    async (url: string) => {
+      await qr.update({ data: url });
+      console.log(qr);
+      qr.append(ref.current);
+    },
+    [qr]
+  );
+  const handleDownload = () => {
+    qr.download({
+      name: "qr-code",
+    });
+  };
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,14 +84,35 @@ export default function Header() {
     [qr, shortUrl, url]
   );
 
-  function handleGenerate() {
-    qr.append(ref.current);
-    console.log(shortUrl);
-  }
-
   return (
     <header className="mt-16">
       <HeaderTitle />
+
+      <Dialog open={open}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-center">Your QR</DialogTitle>
+          </DialogHeader>
+          <div ref={ref} className="flex justify-center" />
+          <div className="flex justify-center font-bold">
+            <button
+              className="px-4 py-1 mx-auto rounded-lg bg-zinc-900 text-zinc-100 hover:bg-zinc-600"
+              onClick={() => handleDownload()}
+            >
+              Download
+            </button>
+            <button
+              className="px-4 py-1 mx-auto text-center border-2 rounded-lg border-zinc-900"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <div
         className={clsx(
           `mx-auto mt-20 rounded-full border-2 border-black bg-zinc-100 p-2 md:mt-28 md:p-4`,
@@ -161,14 +197,22 @@ export default function Header() {
               {`${shortUrl.split("://")[1]}`}
             </a>
             <div className="flex items-center space-x-2">
-              <ClipboardCopy text={shortUrl} />
-              <ShareIcon className="w-5 h-5 " />
-              <button onClick={handleGenerate}>
+              <Copy
+                className="w-4 h-4"
+                onClick={() => navigator.clipboard.writeText(shortUrl)}
+              />
+              <ShareIcon className="w-5 h-5 cursor-pointer" />
+              <button
+                onClick={async () => {
+                  setOpen(true);
+                  await handleGenerate(shortUrl);
+                }}
+              >
                 <QrCodeIcon className="w-6 h-6" />
               </button>
             </div>
           </div>
-          <div ref={ref} className="border-2 rounded-3xl" />
+          {/* <div ref={ref} className="border-2 rounded-3xl" /> */}
         </m.div>
       )}
 

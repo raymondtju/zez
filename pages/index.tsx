@@ -2,21 +2,24 @@ import Head from "next/head";
 
 import { getCurrentUser } from "@/lib/auth";
 import Navbar from "@/components/Navbar";
-import IndexContent from "@/components/pages/home";
+import Header from "@/components/pages/home/Header";
+import Layout from "@/components/Layout";
 
 export default function Home({ session }) {
+  
   return (
     <>
       <Head>
-        <title>kraa.cc - url personalization </title>
-        <meta name="description" content="Shorten your url" />
+        <title>zez.</title>
+        <meta name="description" content="url shortener" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/zez.ico" />
       </Head>
       <main>
         <Navbar session={session} />
-        <IndexContent />
-        {/* <Footer /> */}
+        <Layout>
+          <Header />
+        </Layout>
       </main>
     </>
   );
@@ -24,6 +27,7 @@ export default function Home({ session }) {
 
 export async function getServerSideProps({ req, res }) {
   const session = await getCurrentUser(req, res);
+
   return {
     props: {
       session,

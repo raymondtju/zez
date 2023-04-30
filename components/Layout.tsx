@@ -5,7 +5,7 @@ export default function Layout({ children }: PropsWithChildren) {
   return (
     <div
       className={clsx(
-        "mx-auto w-[90%] max-w-[75rem] text-zinc-900",
+        "mx-auto px-4 max-w-5xl text-zinc-900",
         " dark:text-zinc-100"
       )}
     >

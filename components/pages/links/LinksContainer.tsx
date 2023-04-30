@@ -1,16 +1,34 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState, useCallback } from "react";
 import { m } from "framer-motion";
 import clsx from "clsx";
 import { LinkIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
-import { Dialog, Transition } from "@headlessui/react";
+// import { Dialog, Transition } from "@headlessui/react";
 
 import { removeData } from "@/utils";
 import { formatDate } from "@/utils/formatDate";
-import { useQrCode } from "@/helpers/useQrCode";
+import { useQrCode } from "@/lib/helpers/useQrCode";
 import LinksCard from "./LinksCard";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/Dialog";
+import { Url } from "@prisma/client";
+import {
+  ArrowUpRightFromCircle,
+  BarChart2,
+  CalendarRange,
+  Copy,
+  Link2,
+  Stars,
+} from "lucide-react";
+import Button from "@/components/ui/Button";
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -27,32 +45,38 @@ const container = {
 const LinksContainer = ({
   data,
   loading,
-  mutate
+  mutate,
 }: {
-  data?: any;
-    loading: boolean;
-  mutate: () => void
+  data: Url;
+  loading: boolean;
+  mutate: any;
 }) => {
   const router = useRouter();
-  async function handleDelete(id: string) {
-    const res = await toast.promise(fetch (`/api/url/${id}/delete`, {method: "DELETE"}), {
-      loading: "Deleting...",
-      success: "Deleted",
-      error: "Failed to delete",
-    });
-    // if (res.status === 200) mutate();
-    mutate()
-  }
+  const handleDelete = async (id: string) => {
+    const res = await toast.promise(
+      fetch(`/api/url/${id}/delete`, { method: "DELETE" }),
+      {
+        loading: "Deleting...",
+        success: "Deleted",
+        error: "Failed to delete",
+      }
+    );
+    if (res.status === 200) router.reload();
+    mutate();
+  };
 
   const qr: any = useQrCode();
   const [target, setTarget] = useState("");
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
-  useEffect(() => {
-    qr.update({ data: target });
-    qr.append(ref.current);
-  }, [target, qr]);
+  const handleGenerate = useCallback(
+    async (url: string) => {
+      await qr.update({ data: url });
+      qr.append(ref.current);
+    },
+    [qr]
+  );
 
   const handleDownload = () => {
     qr.download({
@@ -60,116 +84,118 @@ const LinksContainer = ({
     });
   };
 
-  useEffect(() => {
-    if (open) {
-      ref.current.focus();
-    }
-  }, [open]);
+  if (!data) return null;
 
   return (
-    <div>
+    <>
+      <Dialog open={open}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-center">Your QR</DialogTitle>
+          </DialogHeader>
+          <div ref={ref} className="flex justify-center" />
+          <div className="flex justify-center font-bold">
+            <button
+              className="px-4 py-1 mx-auto rounded-lg bg-zinc-900 text-zinc-100 hover:bg-zinc-600"
+              onClick={() => handleDownload()}
+            >
+              Download
+            </button>
+            <button
+              className="px-4 py-1 mx-auto text-center border-2 rounded-lg border-zinc-900"
+              onClick={() => {
+                setOpen(false);
+                setTarget("");
+              }}
+            >
+              Close
+            </button>
+          </div>
+          <DialogDescription></DialogDescription>
+        </DialogContent>
+      </Dialog>
+
       {loading ? (
         <div>Loading</div>
       ) : (
         <>
-          <Dialog
-            open={open}
-            onClose={() => {
-              setOpen(!open);
-              setTarget("");
-            }}
-            className={clsx("relative z-10")}
+          <m.div
+            className="w-full"
+            initial="hidden"
+            animate="visible"
+            variants={container}
           >
-            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 backdrop-blur-sm" />
+            <h2 className="text-2xl font-black">
+              <Link
+                href={`${process.env.NEXT_PUBLIC_BASE_URL}/${data.urlId}`}
+                target="_blank"
+                onClick={() => {
+                  setTimeout(async () => {
+                    await mutate;
+                    console.log(mutate);
+                  }, 5000);
+                }}
+              >
+                {data.title || data.urlId}
+              </Link>
+            </h2>
+            <p className="flex items-center gap-1 font-semibold underline underline-offset-2">
+              {process.env.NEXT_PUBLIC_BASE_URL}/{data.urlId}
+              <Copy
+                className="w-3 h-3 text-blue-900 cursor-pointer"
+                onClick={() =>
+                  navigator.clipboard.writeText(
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/${data.urlId}`
+                  )
+                }
+              />
+              <Link
+                href={`${process.env.NEXT_PUBLIC_BASE_URL}/${data.urlId}`}
+                target="_blank"
+              >
+                <ArrowUpRightFromCircle className="w-3 h-3 text-blue-900 cursor-pointer" />
+              </Link>
+            </p>
 
-            <div className="fixed inset-0 z-10 overflow-y-auto">
-              <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
-                <Transition
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  enterTo="opacity-100 translate-y-0 sm:scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  show={open}
-                  as={Fragment}
-                >
-                  <Dialog.Panel className="relative w-full p-4 overflow-hidden text-left transition-all transform bg-white shadow-xl rounded-xl sm:my-8 sm:w-fit sm:max-w-lg">
-                    <Dialog.Title className="relative flex justify-center text-lg font-bold">
-                      <span>your qr code</span>
-                    </Dialog.Title>
-                    <Dialog.Description className={"text-center"}>
-                      scan or download qr below to redirect to your link
-                    </Dialog.Description>
+            <div className="flex justify-end gap-3">
+              <Button
+                onClick={async () => {
+                  setOpen(true);
+                  await handleGenerate(
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/${data.urlId}`
+                  );
+                }} className="bg-blue-800"
+              >
+                Generate QR
+              </Button>
+              <Button onClick={() => handleDelete(data.urlId)} className="bg-blue-800">Delete</Button>
+            </div>
 
-                    <div ref={ref} className="flex justify-center" />
-                    <div className="flex justify-center mt-4 font-bold">
-                      <button
-                        className="px-4 py-1 mx-auto rounded-lg bg-zinc-900 text-zinc-100 hover:bg-zinc-600"
-                        onClick={() => handleDownload()}
-                      >
-                        download
-                      </button>
-                      <button
-                        className="px-4 py-1 mx-auto text-center border-2 rounded-lg border-zinc-900"
-                        onClick={() => {
-                          setOpen(false);
-                          setTarget("");
-                        }}
-                      >
-                        close
-                      </button>
-                    </div>
-                  </Dialog.Panel>
-                </Transition>
+            <div className="flex gap-3 mt-3">
+              <div className="flex w-[33%] flex-row gap-2 rounded-lg border-[1px] border-gray-200 bg-white px-5 py-2">
+                <BarChart2 className="mt-1.5 inline h-6 w-6" />
+
+                <div className="">
+                  <h3 className="text-lg font-semibold">Reach</h3>
+                  <span className="text-lg font-bold text-blue-900">
+                    {data.reach}
+                  </span>
+                </div>
+              </div>
+              <div className="flex w-[60%] flex-row gap-2 rounded-lg border-[1px] border-gray-200 bg-white px-5 py-2">
+                <CalendarRange className="mt-1.5 inline h-6 w-6" />
+                <div className="">
+                  <h3 className="text-lg font-semibold">Created at</h3>
+                  <span className="text-lg font-bold text-blue-900">
+                    {formatDate(data.createdAt)}
+                  </span>
+                </div>
               </div>
             </div>
-          </Dialog>
-          {data?.length === 0 ? (
-            <>
-              <div className="flex flex-row items-center justify-center gap-1 ">
-                <LinkIcon className="w-5 h-5" />
-                <span className="uppercase">No links found.</span>
-                <Link href="/">
-                  <span className="font-bold text-blue-700 hover:underline hover:underline-offset-2">
-                    Create
-                  </span>
-                </Link>
-              </div>
-            </>
-          ) : (
-            <m.div
-              className="grid gap-4 mt-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
-              initial="hidden"
-              animate="visible"
-              variants={container}
-            >
-              {data.map((item) => (
-                <Fragment key={item.urlId}>
-                  <LinksCard
-                    key={item._id}
-                    urlId={item.urlId}
-                    createdAt={formatDate(item.createdAt)}
-                    reach={item.reach}
-                    url={item.url}
-                    handleDelete={() => handleDelete(item.urlId)}
-                    handleGenerate={() => {
-                      setTarget(`${process.env.NEXT_PUBLIC_BASE_URL}/${item.urlId}`);
-                      setOpen(!open);
-                    }}
-                    handleEdit={() => {
-                      // setEditId(item._id);
-                      // setEditUrl(item.originalUrl);
-                      // setEditModal(true);
-                    }}
-                  />
-                </Fragment>
-              ))}
-            </m.div>
-          )}
+          </m.div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

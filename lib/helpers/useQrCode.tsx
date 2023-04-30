@@ -1,37 +1,3 @@
-// export type QRCodeOptions = {
-//   type: "svg" | "canvas";
-//   width: number;
-//   height: number;
-//   margin: number;
-//   qrOptions: {
-//     typeNumber: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8";
-//     mode: "Byte" | "AlphaNumeric" | "Numeric";
-//     errorCorrectionLevel: "L" | "M" | "Q" | "H";
-//   };
-//   imageOptions: {
-//     hideBackgroundDots: boolean;
-
-//     imageSize: number;
-//     margin: number;
-//   };
-//   dotsOptions: {
-//     type: "rounded" | "extra-rounded" | "square";
-//     color: string;
-//     gradient: null;
-//   };
-//   backgroundOptions: {
-//     color: string;
-//     gradient: null;
-//   };
-//   image: string;
-//   dotsOptionsHelper: any;
-
-//   cornersSquareOptions: any;
-//   cornersSquareOptionsHelper: any;
-//   cornersDotOptions: any;
-//   cornersDotOptionsHelper: any;
-//   backgroundOptionsHelper: any;
-// };
 export function useQrCode(): any {
   if (typeof window !== "undefined") {
     const QRCodeStyling = require("qr-code-styling");

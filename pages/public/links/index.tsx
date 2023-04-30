@@ -27,14 +27,15 @@ export async function getServerSideProps({ req, res }) {
 
 function PublicLinks({session}) {
   const { data: links, isLoading: loading } = useSWR<PublicLinksProps[]>("/api/url?type=public", fetcher);
+  console.log(links);
   
   return (
     <>
       <Head>
         <title>public links</title>
-        <meta name="description" content="kraa.cc - public link list" />
+        <meta name="description" content="zez --public link" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/zez.ico" />
       </Head>
       <main>
         <Toaster />

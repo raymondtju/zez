@@ -10,10 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "next-auth/react";
 
 import Layout from "@/components/Layout";
-import FormInput from "@/components/FormInput";
+import FormInput from "@/components/ui/FormInput";
 import { postData } from "@/utils";
 import { setUsername } from "@/state/user/slice";
-import Button from "@/components/Button";
+import Button from "@/components/ui/Button";
 import Navbar from "@/components/Navbar";
 import { getCurrentUser } from "@/lib/auth";
 
@@ -63,7 +63,7 @@ export default function Signin() {
         <title>Sign In</title>
         <meta name="description" content="Signin Page" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/zez.ico" />
       </Head>
       <main>
         <Navbar />
@@ -72,7 +72,7 @@ export default function Signin() {
           <div className="max-w-md mx-auto mt-20">
             <h1 className="text-4xl font-bold text-center">Sign In</h1>
             <div className="flex flex-col mt-5">
-              <form onSubmit={handleSubmit}>
+              {/* <form onSubmit={handleSubmit}>
                 <FormInput
                   label={"Your username"}
                   name={"username"}
@@ -92,21 +92,22 @@ export default function Signin() {
                 <Button type="submit" disabled={true}>
                   Submit
                 </Button>
-              </form>
+              </form> */}
 
               <Button
                 onClick={() => signIn("google", { callbackUrl: "/links" })}
                 className="mt-4"
               >
+                
                 Signin with google
               </Button>
             </div>
-            <p className="mt-10 text-center">
+            {/* <p className="mt-10 text-center">
               Need an account?
               <Link href="/auth/signup" className="text-blue-700">
                 {" Create an account"}
               </Link>
-            </p>
+            </p> */}
           </div>
         </Layout>
       </main>

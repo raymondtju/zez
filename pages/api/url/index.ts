@@ -17,6 +17,7 @@ export default async function handler(
           count: 50,
           match: `${process.env.NEXT_PUBLIC_BASE_URL}*`
         })
+        console.log(scan);
         let get = scan[1];
         let data: PublicLinksProps[] = get.map((item) => ({
           key: item,
@@ -33,6 +34,7 @@ export default async function handler(
             delete data[x];
             continue
           }
+          console.log(data[x]);
           
           data[x] = {
             key: process.env.NODE_ENV === "development" ? data[x].key.split(":")[3] : data[x].key.split(":")[2],
@@ -41,6 +43,7 @@ export default async function handler(
           } as PublicLinksProps
         }
         data = data.filter(Object)
+        console.log(data);
         
         return res.status(200).json(data);
       } catch (error) {
@@ -59,6 +62,7 @@ export default async function handler(
             userId: session.id,
           },
         });
+
         return res.status(200).json(get);
       } catch (error) {
         return res.status(400).send(error);
