@@ -1,21 +1,13 @@
-import Head from "next/head";
-
 import { getCurrentUser } from "@/lib/auth";
 import Navbar from "@/components/Navbar";
 import Header from "@/components/pages/home/Header";
 import Layout from "@/components/Layout";
-import { getMetatags } from "@/lib/metatags";
+import HeadLayout from "@/components/HeadLayout";
 
 export default function Home({ session }) {
-  
   return (
     <>
-      <Head>
-        <title>zez.</title>
-        <meta name="description" content="url shortener" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/zez.ico" />
-      </Head>
+      <HeadLayout title="zez.pw - Free Custom URL Shortener" />
       <main>
         <Navbar session={session} />
         <Layout>

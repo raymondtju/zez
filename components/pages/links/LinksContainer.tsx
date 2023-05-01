@@ -339,6 +339,7 @@ const LinksContainer = ({
                           [e.target.name]: e.target.value,
                         });
                       }}
+                      required={false}
                     />
                     <FormInput
                       type="text"
@@ -351,6 +352,7 @@ const LinksContainer = ({
                           [e.target.name]: e.target.value,
                         });
                       }}
+                      required={false}
                     />
                     <FormInput
                       type="file"

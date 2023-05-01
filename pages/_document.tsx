@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 import clsx from "clsx";
 import { Html, Head, Main, NextScript } from "next/document";
 

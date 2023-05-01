@@ -9,7 +9,7 @@ export default function LinkPage({ urlId, url, title, meta, description, image }
       <meta property="og:title" content={title || "zez.pw"} />
       <meta
         property="og:site_name"
-        content="zez"
+        content="zez.pw"
       />
       <meta property="og:description" content={description || `${process.env.NEXT_PUBLIC_BASE_URL}/${urlId}`} />
       <meta
@@ -20,6 +20,7 @@ export default function LinkPage({ urlId, url, title, meta, description, image }
         property="og:image:alt"
         content={title}
       />
+
       <meta name="twitter:card" content="summary_large_image" />
       <meta
         name="twitter:site"
