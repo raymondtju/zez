@@ -28,8 +28,6 @@ export default function Home({ session }) {
 
 export async function getServerSideProps({ req, res }) {
   const session = await getCurrentUser(req, res);
-  const meta = await getMetatags("https://www.figma.com/community/file/914233657397286062")
-  console.log(meta);
   return {
     props: {
       session,

@@ -9,22 +9,22 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { type } = req.query
+  const { type } = req.query;
   if (req.method === "GET") {
     if (type == "public") {
       try {
         const scan = await redis.scan(0, {
           count: 50,
-          match: `${process.env.NEXT_PUBLIC_BASE_URL}*`
-        })
+          match: `${process.env.NEXT_PUBLIC_BASE_URL}*`,
+        });
         console.log(scan);
         let get = scan[1];
         let data: PublicLinksProps[] = get.map((item) => ({
           key: item,
           url: "",
-          exp: null
-        }))
-        
+          exp: null,
+        }));
+
         for (const x in data) {
           const pipeline2 = redis.multi();
           pipeline2.ttl(data[x].key);
@@ -32,24 +32,26 @@ export default async function handler(
           const [exp, url]: [number, { url: string }] = await pipeline2.exec();
           if (exp === -1) {
             delete data[x];
-            continue
+            continue;
           }
           console.log(data[x]);
-          
+
           data[x] = {
-            key: process.env.NODE_ENV === "development" ? data[x].key.split(":")[3] : data[x].key.split(":")[2],
+            key:
+              process.env.NODE_ENV === "development"
+                ? data[x].key.split(":")[3]
+                : data[x].key.split(":")[2],
             val: url.url,
-            exp
-          } as PublicLinksProps
+            exp,
+          } as PublicLinksProps;
         }
-        data = data.filter(Object)
+        data = data.filter(Object);
         console.log(data);
-        
+
         return res.status(200).json(data);
       } catch (error) {
         return res.status(400).send(error);
       }
-
     } else {
       try {
         const session = await getCurrentUser(req, res);
@@ -60,6 +62,14 @@ export default async function handler(
         const get = await prisma.url.findMany({
           where: {
             userId: session.id,
+          },
+          select: {
+            urlId: true,
+            url: true,
+            reach: true,
+            title: true,
+            createdAt: true,
+            description: true,
           },
         });
 

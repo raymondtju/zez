@@ -6,6 +6,11 @@ import prisma from "@/lib/prismadb";
 import { getCurrentUser } from "@/lib/auth";
 import { getMetatags } from "@/lib/metatags";
 
+let urlId = ""
+function generateId(){
+  urlId = nanoid(5);
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -19,7 +24,9 @@ export default async function handler(
       const meta = await getMetatags(url);
       if (!meta) return res.status(400).send("Invalid URL");
 
-      const urlId = nanoid(5);
+      const match = await redis.get(`${process.env.NEXT_PUBLIC_BASE_URL}:${urlId}`)
+      if (match) generateId();
+      
       const session = await getCurrentUser(req, res);
       if (!session) {
         console.log("public");
