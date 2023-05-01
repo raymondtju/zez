@@ -21,8 +21,8 @@ export default async function handler(
       if (!url) {
         return res.status(400).send("Field required");
       }
-      const meta = await getMetatags(url);
-      if (!meta) return res.status(400).send("Invalid URL");
+      // const meta = await getMetatags(url);
+      // if (!meta) return res.status(400).send("Invalid URL");
 
       const match = await redis.get(`${process.env.NEXT_PUBLIC_BASE_URL}:${urlId}`)
       if (match) generateId();
