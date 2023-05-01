@@ -6,15 +6,15 @@ import { redis } from "@/lib/upstash";
 export default function LinkPage({ urlId, url, title, meta, description, image }) {
   return (
     <Head>
-      <meta property="og:title" content={title || `${process.env.NEXT_PUBLIC_BASE_URL}/${urlId}`} />
+      <meta property="og:title" content={title || "zez.pw"} />
       <meta
         property="og:site_name"
-        content={`${process.env.NEXT_PUBLIC_BASE_URL}:${urlId}`}
+        content="zez"
       />
-      <meta property="og:description" content={description || "zez.pw"} />
+      <meta property="og:description" content={description || `${process.env.NEXT_PUBLIC_BASE_URL}/${urlId}`} />
       <meta
         property="og:image"
-        content={image || `${process.env.NEXT_PUBLIC_BASE_URL}/${urlId}`}
+        content={image || `${process.env.NEXT_PUBLIC_BASE_URL}/api/og?title=${urlId}`}
       />
       <meta
         property="og:image:alt"
@@ -27,15 +27,15 @@ export default function LinkPage({ urlId, url, title, meta, description, image }
       />
       <meta
         name="twitter:title"
-        content={title || `${process.env.NEXT_PUBLIC_BASE_URL}/${urlId}`}
+        content={title || "zez.pw"}
       />
       <meta
         name="twitter:description"
-        content={description || "zez.pw"}
+        content={description || `${process.env.NEXT_PUBLIC_BASE_URL}/${urlId}`}
       />
       <meta
         name="twitter:image"
-        content={image || `${process.env.NEXT_PUBLIC_BASE_URL}/${urlId}`}
+        content={image || `${process.env.NEXT_PUBLIC_BASE_URL}/api/og?title=${urlId}`}
       />
       <meta
         property="twitter:image:alt"
