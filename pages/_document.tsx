@@ -1,0 +1,21 @@
+import Navbar from "@/components/Navbar";
+import clsx from "clsx";
+import { Html, Head, Main, NextScript } from "next/document";
+
+export default function Document() {
+  return (
+    <Html lang="en">
+      <Head />
+      <body
+        className={clsx(
+          `bg-[#fafafa] font-satoshi selection:bg-zinc-900 selection:text-white`,
+          "dark:bg-zinc-900",
+          "duration-200 ease-in-out"
+        )}
+      >
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+}
