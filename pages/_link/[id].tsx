@@ -14,11 +14,11 @@ export default function LinkPage({ urlId, url, title, meta, description, image }
       <meta property="og:description" content={description || "zez.pw"} />
       <meta
         property="og:image"
-        content={image}
+        content={image || `${process.env.NEXT_PUBLIC_BASE_URL}/${urlId}`}
       />
       <meta
         property="og:image:alt"
-        content=""
+        content={title}
       />
       <meta name="twitter:card" content="summary_large_image" />
       <meta
@@ -35,11 +35,11 @@ export default function LinkPage({ urlId, url, title, meta, description, image }
       />
       <meta
         name="twitter:image"
-        content={image}
+        content={image || `${process.env.NEXT_PUBLIC_BASE_URL}/${urlId}`}
       />
       <meta
         property="twitter:image:alt"
-        content={`OG image for ${urlId} (${process.env.NEXT_PUBLIC_BASE_URL}:${urlId})`}
+        content={title}
       />
       <meta charSet="utf-8" />
     </Head>
