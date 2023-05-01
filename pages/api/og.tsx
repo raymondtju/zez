@@ -6,7 +6,7 @@ export const config = {
 
 // Make sure the font exists in the specified path:
 const font = fetch(
-  new URL("../../assets/fonts/TYPEWR__.ttf", import.meta.url)
+  new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/assets/fonts/TYPEWR__.ttf`, import.meta.url)
 ).then((res) => res.arrayBuffer());
 
 export default async function handler(req) {
