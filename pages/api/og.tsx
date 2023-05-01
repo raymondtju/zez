@@ -5,12 +5,12 @@ export const config = {
 };
 
 // Make sure the font exists in the specified path:
-const font = fetch(
-  new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/assets/fonts/TYPEWR__.ttf`, import.meta.url)
-).then((res) => res.arrayBuffer());
+// const font = fetch(
+//   new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/assets/fonts/TYPEWR__.ttf`, import.meta.url)
+// ).then((res) => res.arrayBuffer());
 
 export default async function handler(req) {
-  const fontData = await font;
+  // const fontData = await font;
   const { searchParams } = new URL(req.url);
   const title = searchParams.has("title")
     ? searchParams.get("title")?.slice(0, 100)
@@ -45,13 +45,13 @@ export default async function handler(req) {
     {
       width: 1200,
       height: 630,
-      fonts: [
-        {
-          name: "Typewriter",
-          data: fontData,
-          style: "normal",
-        },
-      ],
+      // fonts: [
+      //   {
+      //     name: "Typewriter",
+      //     data: fontData,
+      //     style: "normal",
+      //   },
+      // ],
     }
   );
 }
