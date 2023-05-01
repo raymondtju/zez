@@ -1,20 +1,10 @@
-import {
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  ReactElement,
-} from "react";
+import { useRef, useState, useCallback } from "react";
 import { m } from "framer-motion";
 import clsx from "clsx";
 import { LinkIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
-// import { Dialog, Transition } from "@headlessui/react";
-
-import { removeData } from "@/utils";
 import { formatDate } from "@/utils/formatDate";
 import { useQrCode } from "@/lib/helpers/useQrCode";
 import LinksCard from "./LinksCard";
@@ -72,7 +62,10 @@ const LinksContainer = ({
         error: "Failed to delete",
       }
     );
-    if (res.status === 200) remove();
+    if (res.status === 200) {
+      remove();
+      router.reload();
+    }
     mutate;
   };
 

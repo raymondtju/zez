@@ -10,7 +10,6 @@ import { signIn } from "next-auth/react";
 
 import Layout from "@/components/Layout";
 import FormInput from "@/components/ui/FormInput";
-import { postData } from "@/utils";
 import { setUsername } from "@/state/user/slice";
 import Button from "@/components/ui/Button";
 import Navbar from "@/components/Navbar";
@@ -36,26 +35,26 @@ export default function Signin() {
     });
   }
 
-  async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> {
-    e.preventDefault();
-    setAlert(true);
-    const result = await postData("/api/v1/user/signin", form);
-    if (result?.data) {
-      if (result?.status === 200) {
-        token = result.data.token;
-        Cookies.set("token", token);
-        dispatch(setUsername(form.username));
-        toast.success(result?.data?.message || "Signed in successfully");
-        setTimeout(() => {
-          router.push("/");
-        }, 2000);
-      }
-    } else {
-      toast.error(result?.response?.data?.message || "Something went wrong");
-    }
-  }
+  // async function handleSubmit(
+  //   e: React.FormEvent<HTMLFormElement>
+  // ): Promise<void> {
+  //   e.preventDefault();
+  //   setAlert(true);
+  //   const result = await postData("/api/v1/user/signin", form);
+  //   if (result?.data) {
+  //     if (result?.status === 200) {
+  //       token = result.data.token;
+  //       Cookies.set("token", token);
+  //       dispatch(setUsername(form.username));
+  //       toast.success(result?.data?.message || "Signed in successfully");
+  //       setTimeout(() => {
+  //         router.push("/");
+  //       }, 2000);
+  //     }
+  //   } else {
+  //     toast.error(result?.response?.data?.message || "Something went wrong");
+  //   }
+  // }
 
   return (
     <>
@@ -93,7 +92,6 @@ export default function Signin() {
                 onClick={() => signIn("google", { callbackUrl: "/links" })}
                 className="mt-4"
               >
-                
                 Signin with google
               </Button>
             </div>
@@ -110,7 +108,7 @@ export default function Signin() {
   );
 }
 
-export const getServerSideProps = async ({req,res}) => {
+export const getServerSideProps = async ({ req, res }) => {
   const session = await getCurrentUser(req, res);
   if (session) {
     return {

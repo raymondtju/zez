@@ -10,7 +10,7 @@ export const config = {
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname.split("/")[1];
-  if (["favicon.ico", "", "auth", "links", "public", "zez.ico"].includes(path)) {
+  if (["favicon.ico", "", "auth", "links", "public"].includes(path)) {
     return NextResponse.next();
   }
   const find: { url: string } = await redis.get(

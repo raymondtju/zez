@@ -5,7 +5,6 @@ import Head from "next/head";
 import Link from "next/link";
 
 import Layout from "@/components/Layout";
-import { postData } from "@/utils";
 import FormInput from "@/components/ui/FormInput";
 import { GetServerSideProps } from "next";
 import Navbar from "@/components/Navbar";
@@ -29,23 +28,23 @@ export default function Signup() {
     });
   }
 
-  async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> {
-    setAlert(true);
-    e.preventDefault();
-    const result = await postData("/api/v1/user/signup", form);
-    if (result?.data) {
-      if (result?.status === 201) {
-        toast.success(result?.data?.message || "Signed up successfully");
-        setTimeout(() => {
-          router.push("/signin");
-        }, 2000);
-      }
-    } else {
-      toast.error(result?.response?.data?.message || "Something went wrong");
-    }
-  }
+  // async function handleSubmit(
+  //   e: React.FormEvent<HTMLFormElement>
+  // ): Promise<void> {
+  //   setAlert(true);
+  //   e.preventDefault();
+  //   const result = await postData("/api/v1/user/signup", form);
+  //   if (result?.data) {
+  //     if (result?.status === 201) {
+  //       toast.success(result?.data?.message || "Signed up successfully");
+  //       setTimeout(() => {
+  //         router.push("/signin");
+  //       }, 2000);
+  //     }
+  //   } else {
+  //     toast.error(result?.response?.data?.message || "Something went wrong");
+  //   }
+  // }
 
   return (
     <>
@@ -53,7 +52,7 @@ export default function Signup() {
         <title>Sign Up</title>
         <meta name="description" content="Sign Up Page" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/zez.ico" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
         <Navbar />
@@ -62,8 +61,8 @@ export default function Signup() {
           <div className="max-w-md mx-auto mt-20">
             <h1 className="text-4xl font-bold text-center">Sign Up</h1>
             <div className="flex flex-col mt-5">
-              <form onSubmit={handleSubmit}>
-                {/* <FormInput
+              {/* <form onSubmit={handleSubmit}> */}
+              {/* <FormInput
                   label={"Your username"}
                   name={"username"}
                   type={"text"}
@@ -98,7 +97,7 @@ export default function Signup() {
                 <button type="submit" className="formButton">
                   Create account
                 </button> */}
-              </form>
+              {/* </form> */}
             </div>
             <p className="mt-10 text-center">
               Already own an account?

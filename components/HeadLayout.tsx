@@ -36,7 +36,7 @@ function HeadLayout({title}: Props) {
       />
       <meta property="twitter:image" content="https://www.zez.pw/og.png" />
 
-      <link rel="icon" href="/zez.ico" />
+      <link rel="icon" href="/favicon.ico" />
     </Head>
   );
 }

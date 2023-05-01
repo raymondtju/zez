@@ -122,7 +122,6 @@ export default function Links({ session }) {
               loading={isLoading}
               mutate={() => {
                 mutate();
-                console.log("mutation", data);
                 const filtered = data.filter((dataa) => {
                   dataa.urlId === select.urlId;
                 });
