@@ -17,7 +17,6 @@ export default async function handler(
           count: 50,
           match: `${process.env.NEXT_PUBLIC_BASE_URL}*`,
         });
-        console.log(scan);
         let get = scan[1];
         let data: PublicLinksProps[] = get.map((item) => ({
           key: item,

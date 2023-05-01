@@ -1,17 +1,23 @@
-import urlMeta from "open-graph-scraper"
+import * as cheerio from "cheerio";
 
 export const getMetatags = async (url: string) => {
-  try {
-    const get = await urlMeta({url});
-    console.log(get.result);
-    const data = get.result;
+  const get = await fetch(url);
+  const html = await get.text();
 
-    return {
-      title: data.ogTitle || "",
-      description: data.ogDescription || "",
-      image: data?.ogImage["url"] || "",
-    };
-  } catch (err) {
-    return null;
+  const $ = cheerio.load(html);
+  const title =
+    $('meta[property="og:title"]').attr("content") ||
+    $("title").text() ||
+    $('meta[name="title"]').attr("content");
+  const description =
+    $('meta[property="og:description"]').attr("content") ||
+    $('meta[name="description"]').attr("content");
+  const image =
+    $('meta[property="og:image"]').attr("content") ||
+    $('meta[property="og:image:url"]').attr("content");
+  return {
+    title,
+    description,
+    image
   }
 };
