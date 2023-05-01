@@ -41,7 +41,7 @@ function HeaderTitle() {
         initial="hidden"
         animate="visible"
       >
-        {"SHORT SHARE TRACK".split(" ").map((word, index) => {
+        {"SHORT & TRACK".split(" ").map((word, index) => {
           return (
             <m.span variants={item} key={index} className="">
               {word + " "}

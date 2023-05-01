@@ -85,7 +85,7 @@ export default function Header() {
   );
 
   return (
-    <header className="mt-16">
+    <header className="mt-10">
       <HeaderTitle />
 
       <Dialog open={open}>
@@ -115,7 +115,7 @@ export default function Header() {
 
       <div
         className={clsx(
-          `mx-auto mt-20 rounded-full border-2 border-black bg-zinc-100 p-2 md:mt-28 md:p-4`,
+          `mx-auto mt-12 rounded-full border-2 border-black bg-zinc-100 p-2 md:mt-16 md:p-4`,
           `w-full md:w-6/12 md:py-2`,
           "dark:border-zinc-100 dark:bg-zinc-900 dark:text-zinc-100 "
         )}
@@ -137,6 +137,7 @@ export default function Header() {
               seturl(e.target.value);
             }}
             value={url}
+            required
           />
           <button
             className={clsx(
@@ -149,7 +150,7 @@ export default function Header() {
             disabled={loading}
           >
             <span className="sr-only">Shorten</span>
-            <ArrowRightIcon className="w-5 h-5" />
+            <ArrowRightIcon className={clsx("w-5 h-5", loading && "animate-spin")} />
           </button>
         </form>
       </div>
@@ -198,10 +199,10 @@ export default function Header() {
             </a>
             <div className="flex items-center space-x-2">
               <Copy
-                className="w-4 h-4"
+                className="w-4 h-4 cursor-pointer"
                 onClick={() => navigator.clipboard.writeText(shortUrl)}
               />
-              <ShareIcon className="w-5 h-5 cursor-pointer" />
+              {/* <ShareIcon className="w-5 h-5 cursor-pointer" /> */}
               <button
                 onClick={async () => {
                   setOpen(true);

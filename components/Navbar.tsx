@@ -59,7 +59,7 @@ export default function Navbar({ session }: { session?: any }) {
         <div className="flex items-center justify-between py-2">
           <div className="flex items-center gap-1">
             <Link href="/">
-              <h1 className="text-2xl italic font-extrabold">zez.</h1>
+              <h1 className="text-2xl italic font-extrabold">zez</h1>
             </Link>
             {/* <small className="flex items-end">(alpha)</small> */}
           </div>

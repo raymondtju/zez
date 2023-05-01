@@ -1,12 +1,14 @@
+import clsx from "clsx";
 import React from "react";
 
-interface FormInputProps {
+interface FormInputProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   type: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
   name: string;
   label?: string;
   value?: string | "";
+  disabled?: boolean;
 }
 
 export default function FormInput({
@@ -16,6 +18,7 @@ export default function FormInput({
   name,
   label,
   value,
+  disabled
 }: FormInputProps) {
   return (
     <div className="mb-6">
@@ -25,10 +28,11 @@ export default function FormInput({
       <input
         type={type}
         name={name}
-        className="formInput"
+        className={clsx("block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900", "disabled:bg-gray-100 disabled:text-gray-700")}
         placeholder={placeholder}
         onChange={onChange}
         value={value}
+        disabled={disabled}
         required
       />
     </div>
