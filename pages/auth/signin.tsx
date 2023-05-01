@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Head from "next/head";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -16,6 +15,7 @@ import { setUsername } from "@/state/user/slice";
 import Button from "@/components/ui/Button";
 import Navbar from "@/components/Navbar";
 import { getCurrentUser } from "@/lib/auth";
+import HeadLayout from "@/components/HeadLayout";
 
 export default function Signin() {
   const dispatch = useDispatch();
@@ -59,12 +59,7 @@ export default function Signin() {
 
   return (
     <>
-      <Head>
-        <title>Sign In</title>
-        <meta name="description" content="Signin Page" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/zez.ico" />
-      </Head>
+      <HeadLayout title="Singin - zez.pw - Free Custom URL Shortener" />
       <main>
         <Navbar />
         <Layout>

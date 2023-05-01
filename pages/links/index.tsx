@@ -13,6 +13,7 @@ import LinksContainer from "@/components/pages/links/LinksContainer";
 import Navbar from "@/components/Navbar";
 import { Link2Icon, ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "clsx";
+import HeadLayout from "@/components/HeadLayout";
 
 interface UrlResponse extends Array<Url> {
   data: Url[];
@@ -29,12 +30,7 @@ export default function Links({ session }) {
 
   return (
     <>
-      <Head>
-        <title>your links</title>
-        <meta name="description" content="zez -links" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/zez.ico" />
-      </Head>
+      <HeadLayout title="Links - zez.pw - Free Custom URL Shortener" />
       <main>
         <Toaster />
         <Navbar session={session} />
@@ -111,7 +107,7 @@ export default function Links({ session }) {
                             className=""
                           />
                         </div>
-                        <p className={`${hide && "hidden"}`}>{url.urlId}</p>
+                        <p className={`${hide && "hidden"} w-20 truncate`}>{url.urlId}</p>
                       </div>
                     ))
                   ) : (
