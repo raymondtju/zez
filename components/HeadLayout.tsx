@@ -22,7 +22,7 @@ function HeadLayout({title}: Props) {
         property="og:description"
         content="zez is a free online URL shortener that allows you to shorten and customize long URLs into short and memorable links. Create custom short URLs for your website or social media profiles with ease."
       />
-      <meta property="og:image" content="https://zez.pw/og.png" />
+      <meta property="og:image" content="https://zez.pw/og.png?1237810233107" />
 
       <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:url" content="https://zez.pw/" />
@@ -34,7 +34,7 @@ function HeadLayout({title}: Props) {
         property="twitter:description"
         content="zez is a free online URL shortener that allows you to shorten and customize long URLs into short and memorable links. Create custom short URLs for your website or social media profiles with ease."
       />
-      <meta property="twitter:image" content="https://zez.pw/og.png" />
+      <meta property="twitter:image" content="https://zez.pw/og.png?1237810233107" />
 
       <link rel="icon" href="https://zez.pw/favicon.ico" />
     </Head>
