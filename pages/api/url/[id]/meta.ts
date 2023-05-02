@@ -8,10 +8,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const query = req.query;
-    const id = Array.isArray(query.value) ? query.value[0] : query.value;
+    const { id } = req.query;
 
-    const {title, description} = req.body
+    const { title, description } = req.body;
     const session = await getCurrentUser(req, res);
 
     const checkAuth = await prisma.url.findFirst({
@@ -24,12 +23,13 @@ export default async function handler(
 
     const changeMeta = await prisma.url.updateMany({
       where: {
-        urlId: id,
+        urlId: id as string,
+        userId: session.id,
       },
       data: {
         title,
-        description
-      }
+        description,
+      },
     });
     if (!changeMeta) return res.status(400).send("Error changing meta.");
 
