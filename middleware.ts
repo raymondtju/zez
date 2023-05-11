@@ -1,36 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import { redis } from "./lib/upstash";
-import prisma from "@/lib/prismadb";
 
 export const config = {
   matcher: [
-    "/((?!api/|_next/|index.js/|_app.js/links/|_document.js/|auth/|_static|_vercel|[\\w-]+\\.\\w+).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|logo.png|og.png|signin|links|public|github.svg).*)",
   ],
 };
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname.split("/")[1];
-  if (["favicon.ico", "", "auth", "links", "public"].includes(path)) {
+  if ([""].includes(path)) {
     return NextResponse.next();
   }
-  const find: { url: string } = await redis.get(
+  const find = await redis.get<{ url: string }>(
     `${process.env.NEXT_PUBLIC_BASE_URL}:${path}`
   );
-  if (find){
+  if (find?.url) {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/url/${path}/incr`, {
-        method: "POST"
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/link/${path}/incr`, {
+        method: "POST",
       });
     } catch (error) {
       console.log(error);
     }
   }
-  
+
   if (!find) return NextResponse.rewrite(new URL("/", req.url));
-  
+
   if (
     req.nextUrl.searchParams.get("bot") ||
-    /bot/i.test(req.headers.get("user-agent"))
+    /bot/i.test(req.headers.get("user-agent") as string)
   ) {
     return NextResponse.rewrite(new URL(`/_link/${path}`, req.url));
   }

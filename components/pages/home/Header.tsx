@@ -1,48 +1,28 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { m } from "framer-motion";
+"use client";
+
+import React, { useCallback, useState } from "react";
+import { motion } from "framer-motion";
 import clsx from "clsx";
 
+import { Copy } from "lucide-react";
 import {
   ArrowRightIcon,
   LinkIcon,
   QrCodeIcon,
-  ShareIcon,
 } from "@heroicons/react/24/solid";
-import HeaderTitle from "./HeaderTitle";
-import { Copy } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/Dialog";
-import { useQrCode } from "@/lib/helpers/useQrCode";
+
+import HeaderTitle from "./header-title";
+import DialogQR from "@/components/dialog-qr";
+import useQRDialog from "@/hooks/useQRDialog";
 
 export default function Header() {
   const [url, seturl] = useState<string>("");
-  const [shortUrl, setShortUrl] = useState<string>(null);
-  const [error, setError] = useState<string>(null);
+  const [shortUrl, setShortUrl] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [temurl, setTemurl] = useState<string>(null);
+  const [temurl, setTemurl] = useState<string>("");
 
-  const qr = useQrCode();
-  const ref = useRef(null);
-  const [open, setOpen] = useState(false);
-
-  const handleGenerate = useCallback(
-    async (url: string) => {
-      await qr.update({ data: url });
-      console.log(qr);
-      qr.append(ref.current);
-    },
-    [qr]
-  );
-  const handleDownload = () => {
-    qr.download({
-      name: "qr-code",
-    });
-  };
+  const qrDialog = useQRDialog();
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -51,7 +31,7 @@ export default function Header() {
       setError("");
       setShortUrl("");
 
-      const postData = await fetch("/api/url/create", {
+      const postData = await fetch("/links/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,13 +43,10 @@ export default function Header() {
       const result = await postData.json();
 
       if (postData.status === 201) {
+        setShortUrl(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/${result?.data?.urlId}`
+        );
         setTimeout(() => {
-          setShortUrl(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/${result?.data?.urlId}`
-          );
-          qr.update({
-            data: `${shortUrl}`,
-          });
           setLoading(false);
           setTemurl(url);
           seturl("");
@@ -81,38 +58,14 @@ export default function Header() {
         }, 500);
       }
     },
-    [qr, shortUrl, url]
+    [url]
   );
 
   return (
     <header className="mt-10">
+      {qrDialog.isOpen && <DialogQR url={shortUrl} />}
+      
       <HeaderTitle />
-
-      <Dialog open={open}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-center">Your QR</DialogTitle>
-          </DialogHeader>
-          <div ref={ref} className="flex justify-center" />
-          <div className="flex justify-center font-bold">
-            <button
-              className="px-4 py-1 mx-auto rounded-lg bg-zinc-900 text-zinc-100 hover:bg-zinc-600"
-              onClick={() => handleDownload()}
-            >
-              Download
-            </button>
-            <button
-              className="px-4 py-1 mx-auto text-center border-2 rounded-lg border-zinc-900"
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              Close
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
       <div
         className={clsx(
           `mx-auto mt-12 rounded-full border-2 border-black bg-zinc-100 p-2 md:mt-16 md:p-4`,
@@ -124,7 +77,7 @@ export default function Header() {
           className="flex flex-row items-center justify-between gap-4"
           onSubmit={handleSubmit}
         >
-          <LinkIcon className="w-6 h-6" />
+          <LinkIcon className="h-6 w-6" />
           <input
             className={clsx(
               `w-full bg-zinc-100`,
@@ -150,13 +103,15 @@ export default function Header() {
             disabled={loading}
           >
             <span className="sr-only">Shorten</span>
-            <ArrowRightIcon className={clsx("w-5 h-5", loading && "animate-spin")} />
+            <ArrowRightIcon
+              className={clsx("h-5 w-5", loading && "animate-spin")}
+            />
           </button>
         </form>
       </div>
 
       {shortUrl && (
-        <m.div
+        <motion.div
           className={clsx(
             `mx-auto mt-4 grid w-full grid-cols-1 overflow-hidden rounded-xl border-2 border-primary`,
             `md:w-6/12`,
@@ -190,7 +145,7 @@ export default function Header() {
             )}
           >
             <a
-              className="underline decoration-3 hover: underline-offset-2 hover:decoration-4"
+              className="decoration-3 hover: underline underline-offset-2 hover:decoration-4"
               href={shortUrl}
               target="_blank"
               rel="noreferrer"
@@ -199,22 +154,20 @@ export default function Header() {
             </a>
             <div className="flex items-center space-x-2">
               <Copy
-                className="w-4 h-4 cursor-pointer"
+                className="h-4 w-4 cursor-pointer"
                 onClick={() => navigator.clipboard.writeText(shortUrl)}
               />
               {/* <ShareIcon className="w-5 h-5 cursor-pointer" /> */}
               <button
-                onClick={async () => {
-                  setOpen(true);
-                  await handleGenerate(shortUrl);
+                onClick={() => {
+                  qrDialog.onOpen();
                 }}
               >
-                <QrCodeIcon className="w-6 h-6" />
+                <QrCodeIcon className="h-6 w-6" />
               </button>
             </div>
           </div>
-          {/* <div ref={ref} className="border-2 rounded-3xl" /> */}
-        </m.div>
+        </motion.div>
       )}
 
       <div className="mt-10">

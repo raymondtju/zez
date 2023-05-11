@@ -1,3 +1,5 @@
+"use client"
+
 import styles from "./loading.module.css";
 
 const LoadingIcon = () => {

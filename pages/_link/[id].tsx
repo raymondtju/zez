@@ -66,9 +66,9 @@ export async function getServerSideProps(context) {
     props: {
       urlId: id,
       url: find.url,
-      title: meta.title,
-      description: meta.description,
-      image: meta.image
+      title: meta?.title,
+      description: meta?.description,
+      image: meta?.image
     },
   };
 }

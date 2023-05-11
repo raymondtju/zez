@@ -1,48 +1,27 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import clsx from "clsx";
 
-import { toogleTheme } from "@/state/theme/slice";
 import {
   ArrowLeftOnRectangleIcon,
   GlobeAltIcon,
   HomeIcon,
   LinkIcon,
-  MoonIcon,
-  SunIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
-import { useAppDispatch, useAppSelector } from "@/hooks";
-import { signOut } from "next-auth/react";
 import { Menu } from "lucide-react";
-import Layout from "@/components/Layout";
-import Button from "@/components/ui/Button";
 
-export default function Navbar({ session }: { session?: any }) {
-  let theme = useAppSelector((state) => state.theme.value);
+import Container from "@/components/container";
+import Button from "@/components/ui/button";
+import Image from "next/image";
 
-  const dispatch = useAppDispatch();
-
+export default function Navbar({ session }) {
   const router = useRouter();
-  const [isToken, setIsToken] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
-
-  const root = router.pathname === "/";
-
-  useEffect(() => {
-    session ? setIsToken(true) : setIsToken(false);
-  }, [session]);
-
-  useEffect(() => {
-    if (theme) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [theme]);
 
   const handleMenu = () => {
     setIsMenu(!isMenu);
@@ -55,13 +34,20 @@ export default function Navbar({ session }: { session?: any }) {
         "dark:border-zinc-100 dark:bg-primary/30 dark:text-zinc-100"
       )}
     >
-      <Layout>
+      <Container>
         <div className="flex items-center justify-between py-2">
           <div className="flex items-center gap-1">
             <Link href="/">
-              <h1 className="text-2xl italic font-extrabold">zez</h1>
+              <h1 className="text-2xl font-extrabold">
+                <Image
+                  src="/zez.png"
+                  alt="logo"
+                  width={20}
+                  height={20}
+                  className="mr-0.5 inline"
+                />
+              </h1>
             </Link>
-            {/* <small className="flex items-end">(alpha)</small> */}
           </div>
 
           <div
@@ -76,19 +62,9 @@ export default function Navbar({ session }: { session?: any }) {
               </div>
             </Link> */}
 
-            {/* <button
-              className={clsx(
-                `border-spacing-0 rounded-full border-2 border-primary bg-zinc-100 px-5 py-2 font-bold text-primary`,
-                "duration-300 hover:border-2 hover:bg-primary hover:text-zinc-100",
-                "dark:border-2 dark:border-zinc-100 dark:bg-primary dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-primary"
-              )}
-            >
-              Get Started
-            </button> */}
-
-            {router.pathname === "/" && !isToken && (
+            {!session && (
               <div className="flex items-center gap-4">
-                <Link href="/auth/signin">
+                <Link href="/signin">
                   <Button className="px-3 py-1.5 sm:px-4 sm:py-2">
                     Signin
                   </Button>
@@ -96,24 +72,8 @@ export default function Navbar({ session }: { session?: any }) {
               </div>
             )}
 
-            {/* {router.pathname === "/auth/signup" || router.pathname === "/auth/signin" && (
-              <div className="flex items-center gap-4">
-                <Link href="/auth/signin">
-                  <button
-                    className={clsx(
-                      `border-spacing-0 rounded-full border-2 border-primary bg-zinc-100 px-5 py-2 font-bold text-primary`,
-                      "duration-300 hover:border-2 hover:bg-primary hover:text-zinc-100",
-                      "dark:border-2 dark:border-zinc-100 dark:bg-primary dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-primary"
-                    )}
-                  >
-                    Signin
-                  </button>
-                </Link>
-              </div> 
-            )} */}
-
             <button className="flex items-center" onClick={handleMenu}>
-              <Menu className="w-6 h-6" />
+              <Menu className="h-6 w-6" />
             </button>
             <div
               className={clsx(
@@ -126,32 +86,16 @@ export default function Navbar({ session }: { session?: any }) {
               )}
             >
               {/* <div className="fixed inset-0 h-[100vh] bg-zinc-100/90 backdrop-blur-md transition-all dark:bg-zinc-900/90 w-screen" /> */}
-              <Layout>
-                <div className="relative flex flex-col justify-end float-right gap-6 duration-300">
+              <Container>
+                <div className="relative float-right flex flex-col justify-end gap-6 duration-300">
                   <button
-                    className="absolute right-0 flex justify-end top-4"
+                    className="absolute right-0 top-4 flex justify-end"
                     onClick={handleMenu}
                   >
-                    <XMarkIcon className="w-6 h-6" />
+                    <XMarkIcon className="h-6 w-6" />
                   </button>
 
                   <div className="flex flex-row-reverse items-center gap-2">
-                    <button
-                      onClick={() => dispatch(toogleTheme())}
-                      className={clsx(
-                        "mt-14 w-fit rounded-xl border-2 border-zinc-900 p-4",
-                        "transition-all duration-300 ease-in-out hover:bg-zinc-900 hover:text-zinc-100",
-                        "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:border-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
-                      )}
-                    >
-                      {theme ? (
-                        <SunIcon className="w-6 h-6" />
-                      ) : (
-                        <MoonIcon className="w-6 h-6" />
-                      )}
-
-                      <span>{`Theme mode: ${theme ? "dark" : "light"}`}</span>
-                    </button>
                     <button
                       onClick={() => {
                         router.push("/public/links");
@@ -162,12 +106,12 @@ export default function Navbar({ session }: { session?: any }) {
                         "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:border-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
                       )}
                     >
-                      <GlobeAltIcon className="w-6 h-6" />
+                      <GlobeAltIcon className="h-6 w-6" />
                       <span>Public Link</span>
                     </button>
                   </div>
 
-                  {isToken && (
+                  {session && (
                     <div className="flex items-center gap-2">
                       <Link href="/dashboard">
                         <button
@@ -178,7 +122,7 @@ export default function Navbar({ session }: { session?: any }) {
                           )}
                           onClick={handleMenu}
                         >
-                          <HomeIcon className="w-6 h-6" />
+                          <HomeIcon className="h-6 w-6" />
                           <span>Dashboard</span>
                         </button>
                       </Link>
@@ -191,7 +135,7 @@ export default function Navbar({ session }: { session?: any }) {
                           )}
                           onClick={handleMenu}
                         >
-                          <LinkIcon className="w-6 h-6" />
+                          <LinkIcon className="h-6 w-6" />
                           <span>Links</span>
                         </button>
                       </Link>
@@ -205,18 +149,18 @@ export default function Navbar({ session }: { session?: any }) {
                         onClick={() => signOut({ callbackUrl: "/" })}
                       >
                         <span>
-                          <ArrowLeftOnRectangleIcon className="w-6 h-6" />
+                          <ArrowLeftOnRectangleIcon className="h-6 w-6" />
                           <span>Logout</span>
                         </span>
                       </button>
                     </div>
                   )}
                 </div>
-              </Layout>
+              </Container>
             </div>
           </div>
         </div>
-      </Layout>
+      </Container>
     </nav>
   );
 }

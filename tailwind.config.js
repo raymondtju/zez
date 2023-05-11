@@ -1,15 +1,18 @@
 /** @type {import('tailwindcss').Config} */
+import { fontFamily } from "tailwindcss/defaultTheme";
+
 module.exports = {
   darkMode: "class",
   content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       fontFamily: {
-        satoshi: ["Satoshi-Variable", "sans-serif"],
-        chillax: ["Chillax-Variable", "sans-serif"],
+        satoshi: ["var(--font-satoshi)", ...fontFamily.sans],
+        chillax: ["var(--font-chillax)", "sans-serif"],
       },
       colors: {
         primary: "#1B1B1B",
@@ -68,5 +71,8 @@ module.exports = {
       },
     },
   },
-  plugins: [require("prettier-plugin-tailwindcss"), require("tailwindcss-animate")],
+  plugins: [
+    require("prettier-plugin-tailwindcss"),
+    require("tailwindcss-animate"),
+  ],
 };
