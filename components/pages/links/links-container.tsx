@@ -109,6 +109,7 @@ const LinksContainer = ({
                   <Link
                     href={`${process.env.NEXT_PUBLIC_BASE_URL}/${data.urlId}`}
                     target="_blank"
+                    prefetch={false}
                   >
                     {data.title || data.urlId}
                   </Link>
@@ -126,6 +127,7 @@ const LinksContainer = ({
                   <Link
                     href={`${process.env.NEXT_PUBLIC_BASE_URL}/${data.urlId}`}
                     target="_blank"
+                    prefetch={false}
                   >
                     <ArrowUpRightFromCircle className="h-3 w-3 cursor-pointer text-blue-900" />
                   </Link>
