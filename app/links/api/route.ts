@@ -5,57 +5,8 @@ import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/prismadb";
 import { redis } from "@/lib/upstash";
 import { getMetatags } from "@/lib/metatags";
-import { PublicLinksProps } from "@/app/public/links/page";
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const type = searchParams.get("type");
-  const id = searchParams.get("id");
-
-  if (type === "public") {
-    try {
-      const scan = await redis.scan(0, {
-        count: 50,
-        match: `${process.env.NEXT_PUBLIC_BASE_URL}*`,
-      });
-      let get = scan[1];
-      let data: PublicLinksProps[] = get.map((item) => ({
-        key: item,
-        val: "",
-        exp: -1,
-      }));
-
-      for (const x in data) {
-        const pipeline2 = redis.multi();
-        pipeline2.ttl(data[x].key);
-        pipeline2.get(data[x].key);
-        const [exp, url]: [number, { url: string }] = await pipeline2.exec();
-        if (exp === -1) {
-          delete data[x];
-          continue;
-        }
-
-        data[x] = {
-          key:
-            process.env.NODE_ENV === "development"
-              ? data[x].key.split(":")[3]
-              : data[x].key.split(":")[2],
-          val: url.url,
-          exp,
-        } as PublicLinksProps;
-      }
-      data = data.filter(Object);
-
-      return NextResponse.json(data, {
-        status: 200,
-      });
-    } catch (error) {
-      return NextResponse.json(error, {
-        status: 400,
-      });
-    }
-  }
-
+export async function GET() {
   try {
     const session = await getCurrentUser();
     if (!session) {

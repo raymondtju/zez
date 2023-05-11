@@ -2,6 +2,7 @@ import { Metadata } from "next";
 
 import { meta } from "@/lib/const";
 import PublicLinks from "@/components/pages/public-links";
+import { redis } from "@/lib/upstash";
 
 export const metadata: Metadata = {
   ...meta({
@@ -19,20 +20,49 @@ export type PublicLinksProps = {
 };
 
 async function getPublicLinks() {
-  const get = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/links/api?type=public`
-  );
-  return get.json();
+  try {
+    const scan = await redis.scan(0, {
+      count: 50,
+      match: `${process.env.NEXT_PUBLIC_BASE_URL}*`,
+    });
+    let get = scan[1];
+    let data: PublicLinksProps[] = get.map((item) => ({
+      key: item,
+      val: "",
+      exp: -1,
+    }));
+
+    for (const x in data) {
+      const pipeline2 = redis.multi();
+      pipeline2.ttl(data[x].key);
+      pipeline2.get(data[x].key);
+      const [exp, url]: [number, { url: string }] = await pipeline2.exec();
+      if (exp === -1) {
+        delete data[x];
+        continue;
+      }
+
+      data[x] = {
+        key:
+          process.env.NODE_ENV === "development"
+            ? data[x].key.split(":")[3]
+            : data[x].key.split(":")[2],
+        val: url.url,
+        exp,
+      } as PublicLinksProps;
+    }
+    data = data.filter(Object);
+
+    return data;
+  } catch (error) {
+    return null;
+  }
 }
 
 async function Page() {
   const data = await getPublicLinks();
 
-  return (
-    <>
-      <PublicLinks data={data} />
-    </>
-  );
+  return <>{data && <PublicLinks data={data} />}</>;
 }
 
 export default Page;
