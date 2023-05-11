@@ -5,8 +5,6 @@ import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/prismadb";
 import { redis } from "@/lib/upstash";
 import { getMetatags } from "@/lib/metatags";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { PublicLinksProps } from "@/app/public/links/page";
 
 export async function GET(req: Request) {
@@ -36,7 +34,6 @@ export async function GET(req: Request) {
           delete data[x];
           continue;
         }
-        console.log(data[x]);
 
         data[x] = {
           key:

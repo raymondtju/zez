@@ -3,13 +3,13 @@ import { redis } from "./lib/upstash";
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|logo.png|og.png|signin|links|public|github.svg).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|logo.png|og.png|signin|links|public|github.svg|zez.png).*)",
   ],
 };
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname.split("/")[1];
-  if ([""].includes(path)) {
+  if (["", "public", "links"].includes(path)) {
     return NextResponse.next();
   }
   const find = await redis.get<{ url: string }>(

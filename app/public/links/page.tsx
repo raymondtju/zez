@@ -1,9 +1,16 @@
+import { Metadata } from "next";
 
-import { getCurrentUser } from "@/lib/auth";
-import Navbar from "@/components/navbar";
-import Container from "@/components/container";
-
+import { meta } from "@/lib/const";
 import PublicLinks from "@/components/pages/public-links";
+
+export const metadata: Metadata = {
+  ...meta({
+    title: "Public Links | zez.pw - Free Custom URL Shortener",
+    description:
+      "zez is a free URL shortener that allows you to shorten and customize long URLs into short and memorable links. Create custom short URLs for your website or social media profiles with ease.",
+    image: `./og.png`,
+  }),
+};
 
 export type PublicLinksProps = {
   key: string;
@@ -19,21 +26,11 @@ async function getPublicLinks() {
 }
 
 async function Page() {
-  const session = await getCurrentUser();
   const data = await getPublicLinks();
 
   return (
     <>
-      <main>
-        <Navbar session={session} />
-        <Container>
-          <h1 className="mt-8 text-2xl font-bold tracking-tighter">
-            public links
-          </h1>
-
-          <PublicLinks data={data} />
-        </Container>
-      </main>
+      <PublicLinks data={data} />
     </>
   );
 }
