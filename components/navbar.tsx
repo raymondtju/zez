@@ -40,7 +40,7 @@ export default function Navbar({ session }) {
             <Link href="/">
               <h1 className="text-2xl font-extrabold">
                 <Image
-                  src="/zez.png"
+                  src="/logo.png"
                   alt="logo"
                   width={20}
                   height={20}
